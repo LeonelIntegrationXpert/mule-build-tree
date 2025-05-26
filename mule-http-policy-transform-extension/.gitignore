@@ -1,0 +1,45 @@
+# Diretórios de build e dependências
+/target/
+/.build/
+
+# Arquivos temporários
+*.log
+*.tmp
+*.swp
+*.swo
+*.bak
+*.class
+
+# Diretórios e arquivos do Eclipse
+.settings/
+.project
+.classpath
+
+# Diretórios e arquivos do IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Arquivos do Anypoint Studio
+.mule/
+*.mflow
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Arquivos de configuração do Maven que não devem ser versionados
+.mvn/
+!/.mvn/wrapper/maven-wrapper.jar
+mvnw
+mvnw.cmd
+
+# Arquivos do VSCode (caso use para edição)
+.vscode/
+
+# Arquivos do sistema operacional
+ehthumbs.db
+Icon?

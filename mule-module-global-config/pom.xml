@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Mule Module Global Config - pom.xml
+  Autor: Leonel Dorneles Porto
+  Descrição: Configuração de build e dependências para o módulo de configuração global do Mule Runtime.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- ========================================================= -->
+    <!--  1. Model Version e Coordinates                           -->
+    <!-- ========================================================= -->
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>806818a4-2582-4d63-a6ef-021f493715a0</groupId>
+    <artifactId>mule-module-global-config</artifactId>
+    <name>Mule Global Configuration Module</name>
+    <description>Módulo para carregamento e validação de configurações globais do Mule Runtime</description>
+    <version>1.0.0</version>
+
+    <!-- ========================================================= -->
+    <!--  2. Propriedades Globais                                  -->
+    <!-- ========================================================= -->
+    <properties>
+        <!-- Encoding padrão dos fontes -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Nível de compatibilidade Java -->
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+
+        <!-- Versões centralizadas para dependências externas -->
+        <typesafe.config.version>1.4.3</typesafe.config.version>
+        <guava.version>33.4.1-jre</guava.version>
+        <everit.json.version>1.14.6</everit.json.version>
+        <mule.maven.client.version>2.3.3</mule.maven.client.version>
+        <mule.version>4.9.0</mule.version>
+	<java.compat.17>true</java.compat.17>
+    </properties>
+
+    <!-- ========================================================= -->
+    <!--  3. Desenvolvedores                                       -->
+    <!-- ========================================================= -->
+    <developers>
+        <developer>
+            <id>leonel.d.porto</id>
+            <name>Leonel Dorneles Porto</name>
+            <email>leoneldornelesporto@outlook.com.br</email>
+            <organization>Accenture / Telefônica VIVO</organization>
+            <organizationUrl>https://www.accenture.com</organizationUrl>
+            <properties>
+                <linkedin>https://br.linkedin.com/in/leonel-dorneles-porto-b88600122</linkedin>
+            </properties>
+        </developer>
+    </developers>
+
+    <!-- ========================================================= -->
+    <!--  4. Dependências                                          -->
+    <!-- ========================================================= -->
+    <dependencies>
+        <!-- Typesafe Config: leitura de configuração HOCON/JSON -->
+        <dependency>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>${typesafe.config.version}</version>
+        </dependency>
+
+        <!-- Mule Core: classes base do Mule Runtime -->
+        <dependency>
+            <groupId>org.mule.runtime</groupId>
+            <artifactId>mule-core</artifactId>
+            <version>${mule.version}</version>
+        </dependency>
+
+        <!-- Google Guava: utilitários Java -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+
+        <!-- Mule Maven Client API: interação com o Maven dentro do Mule -->
+        <dependency>
+            <groupId>org.mule</groupId>
+            <artifactId>mule-maven-client-api</artifactId>
+            <version>${mule.maven.client.version}</version>
+        </dependency>
+
+        <!-- Everit JSON Schema: validação de JSON contra esquema -->
+        <dependency>
+            <groupId>com.github.erosb</groupId>
+            <artifactId>everit-json-schema</artifactId>
+            <version>${everit.json.version}</version>
+        </dependency>
+
+        <!-- Mule Module Container: abstração de container de módulo -->
+        <dependency>
+            <groupId>org.mule.runtime</groupId>
+            <artifactId>mule-module-container</artifactId>
+            <version>${mule.version}</version>
+        </dependency>
+
+        <!-- Testes Unitários Mule (MUnit) -->
+        <dependency>
+            <groupId>org.mule.tests</groupId>
+            <artifactId>mule-tests-unit</artifactId>
+            <version>${mule.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Allure Reports para resultados de teste -->
+        <dependency>
+            <groupId>org.mule.tests</groupId>
+            <artifactId>mule-tests-allure</artifactId>
+            <version>4.9.5</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- ========================================================= -->
+    <!--  5. Repositórios de Plugins                               -->
+    <!-- ========================================================= -->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>mulesoft-plugin-releases</id>
+            <url>https://repository.mulesoft.org/releases/</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>mulesoft-plugin-snapshots</id>
+            <url>https://repository.mulesoft.org/snapshots/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <!-- ========================================================= -->
+    <!--  6. Repositórios de Dependências                          -->
+    <!-- ========================================================= -->
+    <repositories>
+        <repository>
+            <id>mulesoft-plugin-releases</id>
+            <url>https://repository.mulesoft.org/releases/</url>
+        </repository>
+        <repository>
+            <id>mulesoft-plugin-snapshots</id>
+            <url>https://repository.mulesoft.org/snapshots/</url>
+        </repository>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+    </repositories>
+
+    <!-- ========================================================= -->
+    <!--  7. Distribuição (Exchange)                               -->
+    <!-- ========================================================= -->
+    <distributionManagement>
+        <repository>
+            <id>anypoint-exchange-v2</id>
+            <name>Anypoint Exchange V2</name>
+            <url>https://maven.anypoint.mulesoft.com/api/v2/organizations/${project.groupId}/maven</url>
+            <layout>default</layout>
+        </repository>
+    </distributionManagement>
+
+</project>

@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>806818a4-2582-4d63-a6ef-021f493715a0</groupId>
+	<artifactId>mule-tests-allure</artifactId>
+	<name>Mule EE Tests Allure Constants</name>
+	<description>Tests constants to use with Allure Annotations.</description>
+	<packaging>jar</packaging>
+	<version>1.0.0</version>
+	<url>http://maven.apache.org</url>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.mule.tests</groupId>
+			<artifactId>mule-tests-allure</artifactId>
+			<version>4.9.5</version>
+		</dependency>
+	</dependencies>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>mulesoft-plugin-releases</id>
+			<url>https://repository.mulesoft.org/releases/</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>mulesoft-plugin-snapshots</id>
+			<url>https://repository.mulesoft.org/snapshots/</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<repositories>
+		<repository>
+			<id>mulesoft-plugin-releases</id>
+			<url>https://repository.mulesoft.org/releases/</url>
+		</repository>
+		<repository>
+			<id>mulesoft-plugin-snapshots</id>
+			<url>https://repository.mulesoft.org/snapshots/</url>
+		</repository>
+		<repository>
+			<id>central</id>
+			<url>https://repo.maven.apache.org/maven2</url>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+		<repository>
+			<id>anypoint-exchange-v3</id>
+			<name>Anypoint Exchange V3</name>
+			<url>https://maven.anypoint.mulesoft.com/api/v2/organizations/${project.groupId}/maven</url>
+			<layout>default</layout>
+		</repository>
+	</distributionManagement>
+</project>
