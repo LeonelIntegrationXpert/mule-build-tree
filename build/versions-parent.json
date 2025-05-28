@@ -1,0 +1,86 @@
+{
+  "parent": {
+    "PARENT_GROUP_ID": "806818a4-2582-4d63-a6ef-021f493715a0",
+    "PARENT_ARTIFACT_ID": "common-bom",
+    "PARENT_VERSION": "1.0.0"
+  },
+
+  "project": {
+    "GROUP_ID": "806818a4-2582-4d63-a6ef-021f493715a0",
+    "ARTIFACT_ID": "common-pom-parent",
+    "VERSION": "1.0.0",
+    "DESCRIPTION": "🚀 Parent POM que centraliza build, testes (MUnit) e deploy no CloudHub 2.0, garantindo consistência e boas práticas DevOps."
+  },
+
+  "properties": {
+    /* ⚙️  CloudHub */
+    "env": "Sandbox",
+    "region": "Cloudhub-US-East-2",
+    "cloudhub.vcores": "0.1",
+    "cloudhub.replicas": "1",
+    "provider": "MC",
+    "generateDefaultPublicUrl": "true",
+
+    /* 📡  API / Visualizer */
+    "api.id": "SEU_API_ID",
+    "api.version": "1.0",
+    "visualizer.tags": "demonstracao,leonel,api-layer",
+
+    /* 🧪  Cobertura MUnit */
+    "coverage.runCoverage": "true",
+    "coverage.failBuild": "true",
+    "coverage.requiredCoverage": "90",
+    "coverage.format.console": "console",
+    "coverage.format.sonar": "sonar",
+    "coverage.format.json": "json",
+    "coverage.format.html": "html",
+
+    /* 🏷  Naming Pattern */
+    "app.layer": "api",
+    "app.namingPattern": "${project.artifactId}-${app.layer}-${env}",
+    "mule.app.classifier": "mule-application",
+
+    /*  Layers no Visualizer */
+    "api.layer.xapi": "Experience",
+    "api.layer.papi": "Process",
+    "api.layer.sapi": "System",
+    "api.layer.backend": "Backend",
+    "api.layer.dmz": "DMZ",
+    "api.layer.none": "None",
+
+    /* 🔒  Repositório / Distribuição */
+    "serverId": "exchange-server",
+    "organization.id": "806818a4-2582-4d63-a6ef-021f493715a0",
+    "repository.layout": "default",
+    "corporate-repository.layout": "default",
+
+    /* 🌐  URLs */
+    "anypoint.platform.url": "https://anypoint.mulesoft.com",
+    "base.maven.anypoint.url": "https://maven.anypoint.mulesoft.com/api/v2",
+    "anypoint.exchange.v2.url": "${base.maven.anypoint.url}/maven",
+    "private.exchange.url": "${base.maven.anypoint.url}/organizations/${project.groupId}/maven",
+
+    /* 🔧  Versões de plugins e runtime */
+    "mule.maven.plugin.version": "4.2.0",
+    "munit.version": "3.2.2",
+    "app.runtime": "4.4.0",
+    "java.version": "17",
+    "releaseChannel": "LTS",
+
+    /* ⚙️  Deployment settings extras */
+    "updateStrategy": "rolling",
+    "lastMileSecurity": "disabled",
+    "forwardSslSession": "disabled",
+    "disableAmLogForwarding": "enabled",
+    "clustered": "disabled",
+
+    /* Serviços integrados */
+    "objectStoreV2.enabled": "true",
+
+    /* Secure property de exemplo */
+    "key": "changeme",
+
+    /* 🏁  Nome final do artefato */
+    "finalName": "${app.namingPattern}"
+  }
+}
