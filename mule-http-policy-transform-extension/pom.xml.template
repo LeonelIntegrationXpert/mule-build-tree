@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-        <groupId>806818a4-2582-4d63-a6ef-021f493715a0</groupId>
-        <artifactId>mule-http-policy-transform-extension</artifactId>
-        <version>3.0.4</version>
+        <groupId>{{GROUP_ID}}</groupId>
+        <artifactId>{{ARTIFACT_ID}}</artifactId>
+        <version>{{VERSION}}</version>
 	<packaging>mule-extension</packaging>
 	<name>API Gateway HTTP Policy transform extension</name>
 
@@ -29,12 +29,7 @@
 	</parent>
 
 	<dependencies>
-                        <dependency>
-            <groupId>806818a4-2582-4d63-a6ef-021f493715a0</groupId>
-            <artifactId>api-gateway-http-policy-attributes-extension</artifactId>
-            <version>1.0.19</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
+                <!-- AUTO_DEPENDENCIES -->
 		<dependency>
 			<groupId>org.mule.connectors</groupId>
 			<artifactId>mule-http-connector</artifactId>

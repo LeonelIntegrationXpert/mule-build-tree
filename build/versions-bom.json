@@ -1,0 +1,38 @@
+{
+  "bom": {
+    "groupId": "806818a4-2582-4d63-a6ef-021f493715a0",
+    "artifactId": "common-bom",
+    "version": "1.0.0",
+    "name": "common-bom"
+  },
+  "versions": {
+    "mule.http.connector.version": "1.1.1",
+    "mule.core.ee.version": "4.4.0",
+    "mule.agent.configuration.version": "2.7.3",
+    "snakeyaml.version": "1.29",
+    "mule.module.plugin.ee.version": "4.4.0",
+    "junit.version": "4.13.2",
+    "junit.legacy.version": "3.8.1",
+    "mockito.all.version": "1.10.19",
+    "mockito.core.version": "4.11.0",
+    "log4j.version": "2.17.1",
+    "mule.service.http.version": "1.9.3",
+    "mule.service.scheduler.version": "1.9.5",
+    "mule.sdk.api.version": "0.10.0",
+    "api.gateway.attributes.version": "1.0.15",
+    "mule.tests.allure.version": "4.9.5",
+    "mule.tests.unit.version": "4.9.0",
+    "typesafe.config.version": "1.4.3",
+    "mule.core.version": "4.9.0",
+    "guava.version": "33.4.1-jre",
+    "mule.maven.client.version": "2.3.3",
+    "everit.json.version": "1.14.6",
+    "mule.module.container.version": "4.9.0",
+    "mule.extension.model.version": "4.9.5",
+    "jakarta.inject.version": "2.0.1",
+    "javax.inject.version": "1",
+    "hamcrest.version": "3.0",
+    "custom.tests.allure.version": "1.0.1",
+    "mule.ast.parser.version": "1.5.5"
+  }
+}

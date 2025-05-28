@@ -3,8 +3,8 @@
 
 	<modelVersion>4.0.0</modelVersion>
         <groupId>806818a4-2582-4d63-a6ef-021f493715a0</groupId>
-	<artifactId>api-gateway-http-policy-attributes-extension</artifactId>
-	<version>1.0.10</version>
+        <artifactId>api-gateway-http-policy-attributes-extension</artifactId>
+        <version>1.0.19</version>
 	<packaging>mule-extension</packaging>
 	<name>API Gateway HTTP Attributes extension</name>
 
@@ -35,7 +35,8 @@
             <version>${muleHttpConnectorVersion}</version>
             <classifier>mule-plugin</classifier>
         </dependency>
-	</dependencies>
+	
+</dependencies>
 
 	<pluginRepositories>
 		<pluginRepository>

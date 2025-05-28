@@ -1,0 +1,62 @@
+{
+  "groupId": "806818a4-2582-4d63-a6ef-021f493715a0",
+  "projects": [
+    {
+      "name": "api-gateway-http-policy-attributes-extension",
+      "path": "../api-gateway-http-policy-attributes-extension",
+      "jdk": "8",
+      "maven": "3.9.5",
+      "goal": "clean deploy -DskipTests",
+      "deploy": true,
+      "version": "1.0.21"
+    },
+    {
+      "name": "mule-http-policy-transform-extension",
+      "path": "../mule-http-policy-transform-extension",
+      "jdk": "11",
+      "maven": "3.9.6",
+      "goal": "clean deploy -DskipTests",
+      "deploy": true,
+      "version": "3.0.6",
+      "depends_on": [
+        "api-gateway-http-policy-attributes-extension"
+      ]
+    },
+    {
+      "name": "mule-agent-details",
+      "path": "../mule-agent-details",
+      "jdk": "8",
+      "maven": "3.9.5",
+      "goal": "clean deploy -DskipTests",
+      "deploy": true,
+      "version": "2.0.6"
+    },
+    {
+      "name": "mule-module-global-config",
+      "path": "../mule-module-global-config",
+      "jdk": "17",
+      "maven": "3.9.6",
+      "goal": "clean deploy -DskipTests",
+      "deploy": true,
+      "version": "1.0.6"
+    },
+    {
+      "name": "mule-runtime-ee-extension-model",
+      "path": "../mule-runtime-ee-extension-model",
+      "jdk": "17",
+      "maven": "3.9.5",
+      "goal": "clean deploy -DskipTests",
+      "deploy": true,
+      "version": "1.0.5"
+    },
+    {
+      "name": "mule-tests-allure",
+      "path": "../mule-tests-allure",
+      "jdk": "8",
+      "maven": "3.9.5",
+      "goal": "clean deploy -DskipTests",
+      "deploy": true,
+      "version": "2.0.6"
+    }
+  ]
+}

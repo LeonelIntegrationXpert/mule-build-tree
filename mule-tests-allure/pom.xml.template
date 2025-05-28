@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-        <groupId>806818a4-2582-4d63-a6ef-021f493715a0</groupId>
-        <artifactId>mule-tests-allure</artifactId>
-        <version>2.0.4</version>
+        <groupId>{{GROUP_ID}}</groupId>
+        <artifactId>{{ARTIFACT_ID}}</artifactId>
+        <version>{{VERSION}}</version>
 	<name>Mule EE Tests Allure Constants</name>
 	<description>Tests constants to use with Allure Annotations.</description>
 	<packaging>jar</packaging>
@@ -17,8 +17,7 @@
 			<artifactId>mule-tests-allure</artifactId>
 			<version>4.9.5</version>
 		</dependency>
-	
-</dependencies>
+	</dependencies>
 
 	<pluginRepositories>
 		<pluginRepository>

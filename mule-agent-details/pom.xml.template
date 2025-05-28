@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-        <groupId>806818a4-2582-4d63-a6ef-021f493715a0</groupId>
-        <artifactId>mule-agent-details</artifactId>
-        <version>2.0.4</version>
+        <groupId>{{GROUP_ID}}</groupId>
+        <artifactId>{{ARTIFACT_ID}}</artifactId>
+        <version>{{VERSION}}</version>
 	<packaging>jar</packaging>
 	<name>Mule Agent :: Details</name>
 	<url>http://maven.apache.org</url>
@@ -72,8 +72,7 @@
 			<artifactId>log4j-api</artifactId>
 			<version>2.17.1</version>
 		</dependency>
-	
-</dependencies>
+	</dependencies>
 
 	<pluginRepositories>
 		<pluginRepository>
