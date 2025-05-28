@@ -1,3 +1,4 @@
+import os
 import subprocess
 import datetime
 import re
@@ -43,6 +44,10 @@ def get_current_branch():
     return run_command(["git", "rev-parse", "--abbrev-ref", "HEAD"])
 
 def auto_commit():
+    # 🔄 Mudar para a raiz do repositório
+    repo_root = run_command(["git", "rev-parse", "--show-toplevel"])
+    os.chdir(repo_root)
+
     print("🔍 Verificando alterações no repositório Git...\n")
     changes = get_git_changes()
 
