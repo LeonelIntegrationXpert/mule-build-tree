@@ -1,0 +1,110 @@
+{
+  "developers": [
+    {
+      "id": "leonel.d.porto",
+      "name": "Leonel Dorneles Porto",
+      "email": "leoneldornelesporto@outlook.com.br",
+      "organization": "Accenture",
+      "organizationUrl": "https://www.accenture.com"
+    }
+  ],
+  "projects": [
+    {
+      "name": "api-gateway-http-policy-attributes-extension",
+      "path": "../api-gateway-http-policy-attributes-extension",
+      "jdk": "8",
+      "maven": "3.9.5",
+      "goal": "clean deploy -DskipTests",
+      "deploy": true,
+      "version": "1.0.56",
+      "dependencies": [
+        {
+          "groupId": "org.mule.connectors",
+          "artifactId": "mule-http-connector",
+          "classifier": "mule-plugin"
+        }
+      ]
+    },
+    {
+      "name": "mule-http-policy-transform-extension",
+      "path": "../mule-http-policy-transform-extension",
+      "jdk": "11",
+      "maven": "3.9.6",
+      "goal": "clean deploy -DskipTests",
+      "deploy": true,
+      "version": "3.0.6",
+      "depends_on": [
+        "api-gateway-http-policy-attributes-extension"
+      ]
+    },
+    {
+      "name": "mule-agent-details",
+      "path": "../mule-agent-details",
+      "jdk": "8",
+      "maven": "3.9.5",
+      "goal": "clean deploy -DskipTests",
+      "deploy": true,
+      "version": "2.0.7",
+      "dependencies": [
+        {
+          "groupId": "com.mulesoft.mule.runtime",
+          "artifactId": "mule-core-ee"
+        },
+        {
+          "groupId": "com.mulesoft.agent",
+          "artifactId": "mule-agent-configuration"
+        },
+        {
+          "groupId": "org.yaml",
+          "artifactId": "snakeyaml"
+        },
+        {
+          "groupId": "com.mulesoft.mule.runtime.modules",
+          "artifactId": "mule-module-plugin-ee",
+          "scope": "test"
+        },
+        {
+          "groupId": "junit",
+          "artifactId": "junit",
+          "scope": "test"
+        },
+        {
+          "groupId": "org.mockito",
+          "artifactId": "mockito-all",
+          "scope": "test"
+        },
+        {
+          "groupId": "org.apache.logging.log4j",
+          "artifactId": "log4j-api"
+        }
+      ]
+    },
+    {
+      "name": "mule-module-global-config",
+      "path": "../mule-module-global-config",
+      "jdk": "17",
+      "maven": "3.9.6",
+      "goal": "clean deploy -DskipTests",
+      "deploy": true,
+      "version": "1.0.6"
+    },
+    {
+      "name": "mule-runtime-ee-extension-model",
+      "path": "../mule-runtime-ee-extension-model",
+      "jdk": "17",
+      "maven": "3.9.5",
+      "goal": "clean deploy -DskipTests",
+      "deploy": true,
+      "version": "1.0.5"
+    },
+    {
+      "name": "mule-tests-allure",
+      "path": "../mule-tests-allure",
+      "jdk": "8",
+      "maven": "3.9.5",
+      "goal": "clean deploy -DskipTests",
+      "deploy": true,
+      "version": "2.0.6"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+# imports.txt — módulos a serem importados dinamicamente pelo setup.py
+
+# Built-in modules
+subprocess
+sys
+os
+json
+re
+time
+zipfile
+shutil
+ctypes
+itertools
+argparse
+pathlib
+datetime
+
+# Third-party modules
+requests
+jinja2
+
+# XML parsing
+xml.etree.ElementTree
