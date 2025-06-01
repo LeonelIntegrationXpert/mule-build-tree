@@ -1,60 +1,106 @@
-# ─────────────────────────────────────────────
-# 📦 Diretórios de build e dependências
-# ─────────────────────────────────────────────
-/target/
+# ========================
+# Git Ignore Global
+# ========================
 
-# ─────────────────────────────────────────────
-# 🧹 Arquivos temporários e cache
-# ─────────────────────────────────────────────
+# Logs
 *.log
-*.tmp
-*.swp
-*.swo
-*.bak
-*.class
 
-# ─────────────────────────────────────────────
-# 🧰 IDEs: Eclipse
-# ─────────────────────────────────────────────
-.project
-.classpath
-.settings/
-
-# 🧰 IDEs: IntelliJ IDEA
-.idea/
-*.iml
-*.ipr
-*.iws
-out/
-
-# 🧰 IDEs: VSCode
-.vscode/
-
-# ─────────────────────────────────────────────
-# 🐴 MuleSoft / Anypoint Studio
-# ─────────────────────────────────────────────
-.mule/
-*.mflow
-
-# ─────────────────────────────────────────────
-# ⚙️ Arquivos de configuração do Maven
-# ─────────────────────────────────────────────
-.mvn/
-!/.mvn/wrapper/maven-wrapper.jar
-mvnw
-mvnw.cmd
-
-# ─────────────────────────────────────────────
-# 🖥️ Arquivos de sistema operacional
-# ─────────────────────────────────────────────
+# System files
 .DS_Store
 Thumbs.db
-desktop.ini
-ehthumbs.db
-Icon?
 
-# ─────────────────────────────────────────────
-# 🛠️ Diretórios personalizados
-# ─────────────────────────────────────────────
-/tooling/
-build/tooling
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+*.pyd
+
+# Python egg
+*.egg-info/
+dist/
+build/
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+
+# Maven build folders and artifacts
+**/target/
+*.jar
+*.war
+*.ear
+
+# IntelliJ IDEA / Eclipse
+*.iml
+.idea/
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+
+# Node (caso tenha Frontend)
+node_modules/
+
+# VSCode
+.vscode/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Mac OS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Other system files
+*.swp
+*.swo
+
+# ========================
+# Mule Build Tree Specific
+# ========================
+
+# Ignore 'tooling' folder under '1 - build'
+1 - build/tooling/
+
+# Maven local settings
+.mvn/
+
+# Ignore any personal config file you may have
+*.local
+*.env
+
+# Certificates and secrets (caso existam)
+*.pem
+*.key
+*.jks
+*.p12
+
+# ========================
+# Additional
+# ========================
+
+# Ignore Anypoint Exchange cache
+.mule/
+
+# Ignore compiled java classes
+*.class
