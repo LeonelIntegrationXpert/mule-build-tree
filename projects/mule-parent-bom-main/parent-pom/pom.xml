@@ -1,0 +1,232 @@
+<?xml version="1.0" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- 🔖 (0) Versão do modelo POM (sempre 4.0.0) -->
+    <!--
+      📌 modelVersion: Define a versão do formato POM que este arquivo utiliza.
+      👍 Sempre "4.0.0" para projetos Maven 2 e superiores.
+      🎯 Sem essa tag, o Maven não reconhecerá corretamente este POM.
+    -->
+    <modelVersion>4.0.0</modelVersion>
+    <!-- 📦 (1) Coordenadas principais (sempre obrigatórias) -->
+    <!--
+      Estas tags são o "DNA" do seu projeto Maven. São essenciais para identificar
+      o artefato dentro de repositórios e determinar sua posição na hierarquia de dependências.
+    -->
+    <!-- 🆔 groupId: Identifica a organização ou grupo que produz este artefato.
+         Exemplo: "com.acme", "org.exemplo.projeto"
+         Deve ser único e seguir convenções de domínio invertido. -->
+    <groupId>806818a4-2582-4d63-a6ef-021f493715a0</groupId>
+    <!-- 📛 artifactId: Nome do artefato gerado (JAR, BOM, etc.).
+         Deve ser único dentro do groupId.
+         Exemplo: "meu-bom", "api-core", "serviço-web". -->
+    <artifactId>extensions-parent</artifactId>
+    <!-- 🏷️ version: Versão deste artefato.
+         Pode seguir semver: "1.0.0", "2.5.3-SNAPSHOT", etc.
+         "-SNAPSHOT" indica versão em desenvolvimento, não release. -->
+    <version>1.0.1</version>
+    <!-- 📦 packaging: Tipo de empacotamento.
+         "pom" para BOMs ou Parent POMs.
+         Outros exemplos: "jar", "war", "ear".
+         Se omitido, o Maven usa "jar" por padrão. -->
+    <packaging>pom</packaging>
+    <!-- 📝 name: Nome legível do projeto.
+         Pode conter espaços, emojis, descrições mais ricas.
+         Útil para relatórios e interfaces gráficas de IDEs. -->
+    <name>Parent POM for MuleSoft Extensions</name>
+    <!-- 📋 description: Descrição detalhada do projeto.
+         Explique o propósito, funcionalidades, contexto.
+         Ferramentas e repositórios podem exibí-la para usuários. -->
+    <description>🚀 Parent POM que centraliza build, testes (MUnit) e deploy no CloudHub 2.0, garantindo consistência e boas práticas DevOps.</description>
+    <parent>
+        <!-- 🆔 parent.groupId: Identifica o grupo do POM pai. -->
+        <groupId>806818a4-2582-4d63-a6ef-021f493715a0</groupId>
+        <!-- 📛 parent.artifactId: Nome do POM pai. -->
+        <artifactId>mule-extensions-bom</artifactId>
+        <!-- 🏷️ parent.version: Versão do POM pai. -->
+        <version>1.0.0</version>
+    </parent>
+    <properties>
+        <!-- 🏷️ project.build.sourceEncoding: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- 🏷️ env: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <env>Sandbox</env>
+        <!-- 🏷️ region: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <region>Cloudhub-US-East-2</region>
+        <!-- 🏷️ cloudhub.vcores: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <cloudhub.vcores>0.1</cloudhub.vcores>
+        <!-- 🏷️ cloudhub.replicas: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <cloudhub.replicas>1</cloudhub.replicas>
+        <!-- 🏷️ provider: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <provider>MC</provider>
+        <!-- 🏷️ generateDefaultPublicUrl: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <generateDefaultPublicUrl>true</generateDefaultPublicUrl>
+        <!-- 🏷️ api.id: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <api.id>SEU_API_ID</api.id>
+        <!-- 🏷️ api.version: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <api.version>1.0</api.version>
+        <!-- 🏷️ visualizer.tags: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <visualizer.tags>demonstracao,leonel,api-layer</visualizer.tags>
+        <!-- 🏷️ coverage.runCoverage: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <coverage.runCoverage>true</coverage.runCoverage>
+        <!-- 🏷️ coverage.failBuild: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <coverage.failBuild>true</coverage.failBuild>
+        <!-- 🏷️ coverage.requiredCoverage: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <coverage.requiredCoverage>90</coverage.requiredCoverage>
+        <!-- 🏷️ coverage.format.console: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <coverage.format.console>console</coverage.format.console>
+        <!-- 🏷️ coverage.format.sonar: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <coverage.format.sonar>sonar</coverage.format.sonar>
+        <!-- 🏷️ coverage.format.json: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <coverage.format.json>json</coverage.format.json>
+        <!-- 🏷️ coverage.format.html: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <coverage.format.html>html</coverage.format.html>
+        <!-- 🏷️ app.layer: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <app.layer>api</app.layer>
+        <!-- 🏷️ app.namingPattern: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <app.namingPattern>${project.artifactId}-${app.layer}-${env}</app.namingPattern>
+        <!-- 🏷️ mule.app.classifier: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <mule.app.classifier>mule-application</mule.app.classifier>
+        <!-- 🏷️ serverId: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <serverId>exchange-server</serverId>
+        <!-- 🏷️ organization.id: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <organization.id>806818a4-2582-4d63-a6ef-021f493715a0</organization.id>
+        <!-- 🏷️ repository.layout: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <repository.layout>default</repository.layout>
+        <!-- 🏷️ corporate-repository.layout: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <corporate-repository.layout>default</corporate-repository.layout>
+        <!-- 🏷️ anypoint.platform.url: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <anypoint.platform.url>https://anypoint.mulesoft.com</anypoint.platform.url>
+        <!-- 🏷️ base.maven.anypoint.url: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <base.maven.anypoint.url>https://maven.anypoint.mulesoft.com/api/v2</base.maven.anypoint.url>
+        <!-- 🏷️ anypoint.exchange.v2.url: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <anypoint.exchange.v2.url>${base.maven.anypoint.url}/maven</anypoint.exchange.v2.url>
+        <!-- 🏷️ private.exchange.url: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <private.exchange.url>${base.maven.anypoint.url}/organizations/${project.groupId}/maven</private.exchange.url>
+        <!-- 🏷️ mule.maven.plugin.version: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <mule.maven.plugin.version>4.2.0</mule.maven.plugin.version>
+        <!-- 🏷️ munit.version: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <munit.version>3.2.2</munit.version>
+    </properties>
+    <build>
+        <!-- 🏷️ finalName: Nome final do artefato gerado (sem extensão). -->
+        <finalName>${app.namingPattern}</finalName>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <!-- 🆔 p.groupId: Grupo do plugin (ex.: "org.apache.maven.plugins"). -->
+                    <groupId>org.mule.tools.maven</groupId>
+                    <!-- 📛 p.artifactId: Artefato do plugin (ex.: "maven-compiler-plugin"). -->
+                    <artifactId>mule-maven-plugin</artifactId>
+                    <!-- 🏷️ p.version: Versão fixa do plugin (ex.: "3.8.1"). -->
+                    <version>${mule.maven.plugin.version}</version>
+                    <!-- 🔌 p.extensions: Se este plugin estende o ciclo de vida do Maven. -->
+                    <extensions>true</extensions>
+                    <configuration>
+                        <classifier>${mule.app.classifier}</classifier>
+                        <cloudhub2Deployment>
+                            <uri>${anypoint.platform.url}</uri>
+                            <provider>${provider}</provider>
+                            <environment>${env}</environment>
+                            <target>${region}</target>
+                            <server>${serverId}</server>
+                            <applicationName>${project.artifactId}-${app.layer}-${env}</applicationName>
+                            <muleVersion>4.4.0</muleVersion>
+                            <releaseChannel>LTS</releaseChannel>
+                            <replicas>${cloudhub.replicas}</replicas>
+                            <vCores>${cloudhub.vcores}</vCores>
+                            <javaVersion>17</javaVersion>
+                            <deploymentSettings>
+                                <generateDefaultPublicUrl>${generateDefaultPublicUrl}</generateDefaultPublicUrl>
+                                <updateStrategy>rolling</updateStrategy>
+                                <lastMileSecurity>disabled</lastMileSecurity>
+                                <forwardSslSession>disabled</forwardSslSession>
+                                <disableAmLogForwarding>enabled</disableAmLogForwarding>
+                                <clustered>disabled</clustered>
+                            </deploymentSettings>
+                            <integrations>
+                                <services>
+                                    <objectStoreV2>
+                                        <enabled>true</enabled>
+                                    </objectStoreV2>
+                                </services>
+                            </integrations>
+                            <secureProperties>
+                                <key>changeme</key>
+                            </secureProperties>
+                            <properties>
+                                <env>${env}</env>
+                                <api.id>${api.id}</api.id>
+                                <api.version>${api.version}</api.version>
+                                <anypoint.platform.visualizer.tags>${visualizer.tags}</anypoint.platform.visualizer.tags>
+                            </properties>
+                        </cloudhub2Deployment>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <!-- 🆔 p.groupId: Grupo do plugin (ex.: "org.apache.maven.plugins"). -->
+                    <groupId>com.mulesoft.munit.tools</groupId>
+                    <!-- 📛 p.artifactId: Artefato do plugin (ex.: "maven-compiler-plugin"). -->
+                    <artifactId>munit-maven-plugin</artifactId>
+                    <!-- 🏷️ p.version: Versão fixa do plugin (ex.: "3.8.1"). -->
+                    <version>${munit.version}</version>
+                    <!-- 🔌 p.extensions: Se este plugin estende o ciclo de vida do Maven. -->
+                    <extensions/>
+                    <configuration>
+                        <coverage>
+                            <runCoverage>${coverage.runCoverage}</runCoverage>
+                            <failBuild>${coverage.failBuild}</failBuild>
+                            <requiredApplicationCoverage>${coverage.requiredCoverage}</requiredApplicationCoverage>
+                            <formats>${coverage.format.console}</formats>
+                            <formats>${coverage.format.sonar}</formats>
+                            <formats>${coverage.format.json}</formats>
+                            <formats>${coverage.format.html}</formats>
+                        </coverage>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <!-- 🏷️ ex.id: Identificador desta execução (ex.: "default-compile"). -->
+                            <id>test</id>
+                            <!-- ⏱️ ex.phase: Fase do ciclo de vida do Maven (ex.: "compile", "test"). -->
+                            <phase>test</phase>
+                            <!-- 🎯 ex.goals: Metas a ser executadas (ex.: "compile", "test-compile"). -->
+                            <goals>
+                                <goal>test</goal>
+                                <goal>coverage-report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

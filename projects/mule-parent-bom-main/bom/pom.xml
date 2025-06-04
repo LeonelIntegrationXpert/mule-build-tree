@@ -1,0 +1,203 @@
+<?xml version="1.0" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <!-- 🔖 (0) Versão do modelo POM (sempre 4.0.0) -->
+  <!--
+      📌 modelVersion: Define a versão do formato POM que este arquivo utiliza.
+      👍 Sempre "4.0.0" para projetos Maven 2 e superiores.
+      🎯 Sem essa tag, o Maven não reconhecerá corretamente este POM.
+    -->
+  <modelVersion>4.0.0</modelVersion>
+  <!-- 📦 (1) Coordenadas principais (sempre obrigatórias) -->
+  <!--
+      Estas tags são o "DNA" do seu projeto Maven. São essenciais para identificar
+      o artefato dentro de repositórios e determinar sua posição na hierarquia de dependências.
+    -->
+  <!-- 🆔 groupId: Identifica a organização ou grupo que produz este artefato.
+         Exemplo: "com.acme", "org.exemplo.projeto"
+         Deve ser único e seguir convenções de domínio invertido. -->
+  <groupId>806818a4-2582-4d63-a6ef-021f493715a0</groupId>
+  <!-- 📛 artifactId: Nome do artefato gerado (JAR, BOM, etc.).
+         Deve ser único dentro do groupId.
+         Exemplo: "meu-bom", "api-core", "serviço-web". -->
+  <artifactId>mule-extensions-bom</artifactId>
+  <!-- 🏷️ version: Versão deste artefato.
+         Pode seguir semver: "1.0.0", "2.5.3-SNAPSHOT", etc.
+         "-SNAPSHOT" indica versão em desenvolvimento, não release. -->
+  <version>1.0.1</version>
+  <!-- 📦 packaging: Tipo de empacotamento.
+         "pom" para BOMs ou Parent POMs.
+         Outros exemplos: "jar", "war", "ear".
+         Se omitido, o Maven usa "jar" por padrão. -->
+  <packaging>pom</packaging>
+  <!-- 📝 name: Nome legível do projeto.
+         Pode conter espaços, emojis, descrições mais ricas.
+         Útil para relatórios e interfaces gráficas de IDEs. -->
+  <name>BOM for MuleSoft Extensions</name>
+  <parent>
+    <!-- 🆔 parent.groupId: Identifica o grupo do POM pai. -->
+    <groupId>org.mule.extensions</groupId>
+    <!-- 📛 parent.artifactId: Nome do POM pai. -->
+    <artifactId>mule-modules-parent</artifactId>
+    <!-- 🏷️ parent.version: Versão do POM pai. -->
+    <version>1.1.3</version>
+  </parent>
+  <properties>
+    <!-- 🏷️ project.build.sourceEncoding: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- 🏷️ muleHttpConnectorVersion: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+    <muleHttpConnectorVersion>1.1.1</muleHttpConnectorVersion>
+    <!-- 🏷️ muleCoreEeVersion: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+    <muleCoreEeVersion>4.4.0</muleCoreEeVersion>
+    <!-- 🏷️ muleAgentConfigurationVersion: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+    <muleAgentConfigurationVersion>2.7.3</muleAgentConfigurationVersion>
+    <!-- 🏷️ snakeyamlVersion: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+    <snakeyamlVersion>1.29</snakeyamlVersion>
+    <!-- 🏷️ muleModulePluginEeVersion: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+    <muleModulePluginEeVersion>4.4.0</muleModulePluginEeVersion>
+    <!-- 🏷️ junitVersion: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+    <junitVersion>4.13.2</junitVersion>
+    <!-- 🏷️ mockitoAllVersion: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+    <mockitoAllVersion>1.10.19</mockitoAllVersion>
+    <!-- 🏷️ log4jApiVersion: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+    <log4jApiVersion>2.17.1</log4jApiVersion>
+  </properties>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <!-- 🆔 dep.groupId: Grupo da dependência. -->
+        <groupId>org.mule.connectors</groupId>
+        <!-- 📛 dep.artifactId: Artefato da dependência. -->
+        <artifactId>mule-http-connector</artifactId>
+        <!-- 🏷️ dep.version: Versão unificada para essa dependência. -->
+        <version>${muleHttpConnectorVersion}</version>
+        <!-- ⚙️ dep.scope: Escopo da dependência (ex.: "compile", "test"). -->
+        <scope>compile</scope>
+        <!-- 🏷️ dep.classifier: Classificador para diferenciar artefatos (ex.: "sources"). -->
+        <classifier>mule-plugin</classifier>
+      </dependency>
+      <dependency>
+        <!-- 🆔 dep.groupId: Grupo da dependência. -->
+        <groupId>com.mulesoft.mule.runtime</groupId>
+        <!-- 📛 dep.artifactId: Artefato da dependência. -->
+        <artifactId>mule-core-ee</artifactId>
+        <!-- 🏷️ dep.version: Versão unificada para essa dependência. -->
+        <version>${muleCoreEeVersion}</version>
+        <!-- ⚙️ dep.scope: Escopo da dependência (ex.: "compile", "test"). -->
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <!-- 🆔 dep.groupId: Grupo da dependência. -->
+        <groupId>com.mulesoft.agent</groupId>
+        <!-- 📛 dep.artifactId: Artefato da dependência. -->
+        <artifactId>mule-agent-configuration</artifactId>
+        <!-- 🏷️ dep.version: Versão unificada para essa dependência. -->
+        <version>${muleAgentConfigurationVersion}</version>
+        <!-- ⚙️ dep.scope: Escopo da dependência (ex.: "compile", "test"). -->
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <!-- 🆔 dep.groupId: Grupo da dependência. -->
+        <groupId>org.yaml</groupId>
+        <!-- 📛 dep.artifactId: Artefato da dependência. -->
+        <artifactId>snakeyaml</artifactId>
+        <!-- 🏷️ dep.version: Versão unificada para essa dependência. -->
+        <version>${snakeyamlVersion}</version>
+        <!-- ⚙️ dep.scope: Escopo da dependência (ex.: "compile", "test"). -->
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <!-- 🆔 dep.groupId: Grupo da dependência. -->
+        <groupId>com.mulesoft.mule.runtime.modules</groupId>
+        <!-- 📛 dep.artifactId: Artefato da dependência. -->
+        <artifactId>mule-module-plugin-ee</artifactId>
+        <!-- 🏷️ dep.version: Versão unificada para essa dependência. -->
+        <version>${muleModulePluginEeVersion}</version>
+        <!-- ⚙️ dep.scope: Escopo da dependência (ex.: "compile", "test"). -->
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <!-- 🆔 dep.groupId: Grupo da dependência. -->
+        <groupId>junit</groupId>
+        <!-- 📛 dep.artifactId: Artefato da dependência. -->
+        <artifactId>junit</artifactId>
+        <!-- 🏷️ dep.version: Versão unificada para essa dependência. -->
+        <version>${junitVersion}</version>
+        <!-- ⚙️ dep.scope: Escopo da dependência (ex.: "compile", "test"). -->
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <!-- 🆔 dep.groupId: Grupo da dependência. -->
+        <groupId>org.mockito</groupId>
+        <!-- 📛 dep.artifactId: Artefato da dependência. -->
+        <artifactId>mockito-all</artifactId>
+        <!-- 🏷️ dep.version: Versão unificada para essa dependência. -->
+        <version>${mockitoAllVersion}</version>
+        <!-- ⚙️ dep.scope: Escopo da dependência (ex.: "compile", "test"). -->
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <!-- 🆔 dep.groupId: Grupo da dependência. -->
+        <groupId>org.apache.logging.log4j</groupId>
+        <!-- 📛 dep.artifactId: Artefato da dependência. -->
+        <artifactId>log4j-api</artifactId>
+        <!-- 🏷️ dep.version: Versão unificada para essa dependência. -->
+        <version>${log4jApiVersion}</version>
+        <!-- ⚙️ dep.scope: Escopo da dependência (ex.: "compile", "test"). -->
+        <scope>compile</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <repositories>
+    <repository>
+      <!-- 🆔 repo.id: Identificador deste repositório (ex.: "mulesoft-release"). -->
+      <id>mulesoft-plugin-releases</id>
+      <!-- 🔗 repo.url: URL base para resolução de dependências. -->
+      <url>https://repository.mulesoft.org/releases/</url>
+    </repository>
+    <repository>
+      <!-- 🆔 repo.id: Identificador deste repositório (ex.: "mulesoft-release"). -->
+      <id>mulesoft-plugin-snapshots</id>
+      <!-- 🔗 repo.url: URL base para resolução de dependências. -->
+      <url>https://repository.mulesoft.org/snapshots/</url>
+    </repository>
+    <repository>
+      <!-- 🆔 repo.id: Identificador deste repositório (ex.: "mulesoft-release"). -->
+      <id>central</id>
+      <!-- 🔗 repo.url: URL base para resolução de dependências. -->
+      <url>https://repo.maven.apache.org/maven2</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <!-- 🆔 pluginRepo.id: Identificador para repositório de plugins. -->
+      <id>mulesoft-plugin-releases</id>
+      <!-- 🔗 pluginRepo.url: URL para resolução de plugins. -->
+      <url>https://repository.mulesoft.org/releases/</url>
+    </pluginRepository>
+    <pluginRepository>
+      <!-- 🆔 pluginRepo.id: Identificador para repositório de plugins. -->
+      <id>mulesoft-plugin-snapshots</id>
+      <!-- 🔗 pluginRepo.url: URL para resolução de plugins. -->
+      <url>https://repository.mulesoft.org/snapshots/</url>
+    </pluginRepository>
+  </pluginRepositories>
+  <distributionManagement>
+    <repository>
+      <!-- 🆔 repository.id: Identificador do repositório de release. -->
+      <id>anypoint-exchange-v3</id>
+      <!-- 📛 repository.name: Nome legível (ex.: "Acme Release Repo"). -->
+      <name>Anypoint Exchange V3</name>
+      <!-- 🔗 repository.url: URL para publicar releases. -->
+      <url>https://maven.anypoint.mulesoft.com/api/v2/organizations/${project.groupId}/maven</url>
+    </repository>
+  </distributionManagement>
+</project>

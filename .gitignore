@@ -79,8 +79,8 @@ Desktop.ini
 # Mule Build Tree Specific
 # ========================
 
-# Ignore 'tooling' folder under '1 - build'
-1 - build/tooling/
+# Ignore 'tooling' folder under 'build'
+build/tooling/
 
 # Maven local settings
 .mvn/

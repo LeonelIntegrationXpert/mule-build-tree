@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <!-- 🔖 (0) Versão do modelo POM (sempre 4.0.0) -->
+  <!--
+      📌 modelVersion: Define a versão do formato POM que este arquivo utiliza.
+      👍 Sempre "4.0.0" para projetos Maven 2 e superiores.
+      🎯 Sem essa tag, o Maven não reconhecerá corretamente este POM.
+    -->
+  <modelVersion>4.0.0</modelVersion>
+  <!-- 📦 (1) Coordenadas principais (sempre obrigatórias) -->
+  <!--
+      Estas tags são o "DNA" do seu projeto Maven. São essenciais para identificar
+      o artefato dentro de repositórios e determinar sua posição na hierarquia de dependências.
+    -->
+  <!-- 🆔 groupId: Identifica a organização ou grupo que produz este artefato.
+         Exemplo: "com.acme", "org.exemplo.projeto"
+         Deve ser único e seguir convenções de domínio invertido. -->
+  <groupId>806818a4-2582-4d63-a6ef-021f493715a0</groupId>
+  <!-- 📛 artifactId: Nome do artefato gerado (JAR, BOM, etc.).
+         Deve ser único dentro do groupId.
+         Exemplo: "meu-bom", "api-core", "serviço-web". -->
+  <artifactId>api-gateway-http-policy-attributes-extension</artifactId>
+  <!-- 🏷️ version: Versão deste artefato.
+         Pode seguir semver: "1.0.0", "2.5.3-SNAPSHOT", etc.
+         "-SNAPSHOT" indica versão em desenvolvimento, não release. -->
+  <version>1.0.60</version>
+  <!-- 📦 packaging: Tipo de empacotamento.
+         "pom" para BOMs ou Parent POMs.
+         Outros exemplos: "jar", "war", "ear".
+         Se omitido, o Maven usa "jar" por padrão. -->
+  <packaging>pom</packaging>
+  <!-- 📝 name: Nome legível do projeto.
+         Pode conter espaços, emojis, descrições mais ricas.
+         Útil para relatórios e interfaces gráficas de IDEs. -->
+  <name>api-gateway-http-policy-attributes-extension</name>
+  <parent>
+    <!-- 🆔 parent.groupId: Identifica o grupo do POM pai. -->
+    <groupId>806818a4-2582-4d63-a6ef-021f493715a0</groupId>
+    <!-- 📛 parent.artifactId: Nome do POM pai. -->
+    <artifactId>extensions-parent</artifactId>
+    <!-- 🏷️ parent.version: Versão do POM pai. -->
+    <version>1.0.0</version>
+  </parent>
+  <dependencies>
+    <dependency>
+      <!-- 🆔 dep.groupId: Grupo da dependência. -->
+      <groupId>org.mule.connectors</groupId>
+      <!-- 📛 dep.artifactId: Artefato a ser incluído. -->
+      <artifactId>mule-http-connector</artifactId>
+      <!-- 🏷️ dep.classifier: Classificador (ex.: "sources", "javadoc"). -->
+      <classifier>mule-plugin</classifier>
+    </dependency>
+  </dependencies>
+</project>
