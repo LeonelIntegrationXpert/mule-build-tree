@@ -1,0 +1,125 @@
+{
+  "modelVersion": "4.0.0",
+  "artifactId": "extensions-parent",
+  "version": "1.0.1",
+  "packaging": "pom",
+  "name": "Parent POM for MuleSoft Extensions",
+  "description": "🚀 Parent POM que centraliza build, testes (MUnit) e deploy no CloudHub 2.0, garantindo consistência e boas práticas DevOps.",
+  "parent": {
+    "artifactId": "mule-extensions-bom",
+    "version": "1.0.0"
+  },
+  "properties": {
+    "project.build.sourceEncoding": "UTF-8",
+    "env": "Sandbox",
+    "region": "Cloudhub-US-East-2",
+    "cloudhub.vcores": "0.1",
+    "cloudhub.replicas": "1",
+    "provider": "MC",
+    "generateDefaultPublicUrl": "true",
+    "api.id": "SEU_API_ID",
+    "api.version": "1.0",
+    "visualizer.tags": "demonstracao,leonel,api-layer",
+    "coverage.runCoverage": "true",
+    "coverage.failBuild": "true",
+    "coverage.requiredCoverage": "90",
+    "coverage.format.console": "console",
+    "coverage.format.sonar": "sonar",
+    "coverage.format.json": "json",
+    "coverage.format.html": "html",
+    "app.layer": "api",
+    "app.namingPattern": "${project.artifactId}-${app.layer}-${env}",
+    "mule.app.classifier": "mule-application",
+    "serverId": "exchange-server",
+    "organization.id": "806818a4-2582-4d63-a6ef-021f493715a0",
+    "repository.layout": "default",
+    "corporate-repository.layout": "default",
+    "anypoint.platform.url": "https://anypoint.mulesoft.com",
+    "base.maven.anypoint.url": "https://maven.anypoint.mulesoft.com/api/v2",
+    "anypoint.exchange.v2.url": "${base.maven.anypoint.url}/maven",
+    "private.exchange.url": "${base.maven.anypoint.url}/organizations/${project.groupId}/maven",
+    "mule.maven.plugin.version": "4.2.0",
+    "munit.version": "3.2.2"
+  },
+  "build": {
+    "finalName": "${app.namingPattern}",
+    "pluginManagement": {
+      "plugins": [
+        {
+          "groupId": "org.mule.tools.maven",
+          "artifactId": "mule-maven-plugin",
+          "version": "${mule.maven.plugin.version}",
+          "extensions": "true",
+          "configuration": {
+            "classifier": "${mule.app.classifier}",
+            "cloudhub2Deployment": {
+              "uri": "${anypoint.platform.url}",
+              "provider": "${provider}",
+              "environment": "${env}",
+              "target": "${region}",
+              "server": "${serverId}",
+              "applicationName": "${project.artifactId}-${app.layer}-${env}",
+              "muleVersion": "4.4.0",
+              "releaseChannel": "LTS",
+              "replicas": "${cloudhub.replicas}",
+              "vCores": "${cloudhub.vcores}",
+              "javaVersion": "17",
+              "deploymentSettings": {
+                "generateDefaultPublicUrl": "${generateDefaultPublicUrl}",
+                "updateStrategy": "rolling",
+                "lastMileSecurity": "disabled",
+                "forwardSslSession": "disabled",
+                "disableAmLogForwarding": "enabled",
+                "clustered": "disabled"
+              },
+              "integrations": {
+                "services": {
+                  "objectStoreV2": {
+                    "enabled": "true"
+                  }
+                }
+              },
+              "secureProperties": {
+                "key": "changeme"
+              },
+              "properties": {
+                "env": "${env}",
+                "api.id": "${api.id}",
+                "api.version": "${api.version}",
+                "anypoint.platform.visualizer.tags": "${visualizer.tags}"
+              }
+            }
+          }
+        },
+        {
+          "groupId": "com.mulesoft.munit.tools",
+          "artifactId": "munit-maven-plugin",
+          "version": "${munit.version}",
+          "executions": [
+            {
+              "id": "test",
+              "phase": "test",
+              "goals": [
+                "test",
+                "coverage-report"
+              ]
+            }
+          ],
+          "configuration": {
+            "coverage": {
+              "runCoverage": "${coverage.runCoverage}",
+              "failBuild": "${coverage.failBuild}",
+              "requiredApplicationCoverage": "${coverage.requiredCoverage}",
+              "formats": [
+                "${coverage.format.console}",
+                "${coverage.format.sonar}",
+                "${coverage.format.json}",
+                "${coverage.format.html}"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

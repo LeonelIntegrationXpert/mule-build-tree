@@ -1,0 +1,845 @@
+{# ----------------------------------------------------------#}
+{# 🚀 Template Jinja2 Detalhado para Gerar POM BOM ou POM Parent  #}
+{#    Abusando de comentários, ícones e explicações de cada tag   #}
+{# Basta preencher o contexto com as chaves adequadas; se alguma #}
+{# seção não se aplicar, omita-a ou passe como lista/dicionário   #}
+{# vazio.                                                        #}
+{# ----------------------------------------------------------#}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- 🔖 (0) Versão do modelo POM (sempre 4.0.0) -->
+    <!--
+      📌 modelVersion: Define a versão do formato POM que este arquivo utiliza.
+      👍 Sempre "4.0.0" para projetos Maven 2 e superiores.
+      🎯 Sem essa tag, o Maven não reconhecerá corretamente este POM.
+    -->
+    <modelVersion>{{ modelVersion or "4.0.0" }}</modelVersion>
+
+    <!-- 📦 (1) Coordenadas principais (sempre obrigatórias) -->
+    <!--
+      Estas tags são o "DNA" do seu projeto Maven. São essenciais para identificar
+      o artefato dentro de repositórios e determinar sua posição na hierarquia de dependências.
+    -->
+
+    <!-- 🆔 groupId: Identifica a organização ou grupo que produz este artefato.
+         Exemplo: "com.acme", "org.exemplo.projeto"
+         Deve ser único e seguir convenções de domínio invertido. -->
+    <groupId>{{ groupId }}</groupId>
+
+    <!-- 📛 artifactId: Nome do artefato gerado (JAR, BOM, etc.).
+         Deve ser único dentro do groupId.
+         Exemplo: "meu-bom", "api-core", "serviço-web". -->
+    <artifactId>{{ artifactId }}</artifactId>
+
+    <!-- 🏷️ version: Versão deste artefato.
+         Pode seguir semver: "1.0.0", "2.5.3-SNAPSHOT", etc.
+         "-SNAPSHOT" indica versão em desenvolvimento, não release. -->
+    <version>{{ version }}</version>
+
+    <!-- 📦 packaging: Tipo de empacotamento.
+         "pom" para BOMs ou Parent POMs.
+         Outros exemplos: "jar", "war", "ear".
+         Se omitido, o Maven usa "jar" por padrão. -->
+    <packaging>{{ packaging or "pom" }}</packaging>
+
+    <!-- 📝 name: Nome legível do projeto.
+         Pode conter espaços, emojis, descrições mais ricas.
+         Útil para relatórios e interfaces gráficas de IDEs. -->
+    <name>{{ name }}</name>
+
+    {% if description %}
+    <!-- 📋 description: Descrição detalhada do projeto.
+         Explique o propósito, funcionalidades, contexto.
+         Ferramentas e repositórios podem exibí-la para usuários. -->
+    <description>{{ description }}</description>
+    {% endif %}
+
+    {% if url %}
+    <!-- 🌐 url: Endereço principal do projeto (site, GitHub, wiki).
+         Incentiva visibilidade e aponta para documentação adicional. -->
+    <url>{{ url }}</url>
+    {% endif %}
+
+    {% if inceptionYear %}
+    <!-- 📅 inceptionYear: Ano de início do desenvolvimento.
+         Permite rastrear quanto tempo o projeto existe.
+         Ex: "2023", "2015". -->
+    <inceptionYear>{{ inceptionYear }}</inceptionYear>
+    {% endif %}
+
+
+    {# ----------------------------------------------------------#}
+    {# 🔗 (2) Parent of Parent                                        #}
+    {#    Quando este POM herda de outro POM (por ex., módulo filho)  #}
+    {# ----------------------------------------------------------#}
+    {% if parent %}
+    <parent>
+        <!-- 🆔 parent.groupId: Identifica o grupo do POM pai. -->
+        <groupId>{{ parent.groupId }}</groupId>
+
+        <!-- 📛 parent.artifactId: Nome do POM pai. -->
+        <artifactId>{{ parent.artifactId }}</artifactId>
+
+        <!-- 🏷️ parent.version: Versão do POM pai. -->
+        <version>{{ parent.version }}</version>
+
+        {% if parent.relativePath %}
+        <!-- 🛣️ relativePath: Caminho relativo para encontrar o POM pai no sistema de arquivos.
+             Por exemplo: "../pai/pom.xml".
+             Se omitido, o Maven tenta buscar no repositório remoto padrão. -->
+        <relativePath>{{ parent.relativePath }}</relativePath>
+        {% endif %}
+    </parent>
+    {% endif %}
+
+
+    {# ----------------------------------------------------------#}
+    {# 🏢 (3) Metadados opcionais: organização, licenças, SCM, issue,  #}
+    {#       CI, mailing lists                                          #}
+    {# ----------------------------------------------------------#}
+
+    {% if organization %}
+    <organization>
+        <!-- 🏭 organization.name: Nome da organização ou empresa proprietária. -->
+        <name>{{ organization.name }}</name>
+        <!-- 🌍 organization.url: URL oficial da organização. -->
+        <url>{{ organization.url }}</url>
+    </organization>
+    {% endif %}
+
+    {% if licenses %}
+    <licenses>
+        {% for license in licenses %}
+        <license>
+            <!-- 📜 license.name: Nome da licença (ex.: Apache License 2.0). -->
+            <name>{{ license.name }}</name>
+            <!-- 🔗 license.url: Link para o texto completo da licença. -->
+            <url>{{ license.url }}</url>
+            {% if license.distribution %}
+            <!-- 🚚 license.distribution: Indica como a licença é distribuída (ex.: repo, manual). -->
+            <distribution>{{ license.distribution }}</distribution>
+            {% endif %}
+            {% if license.comments %}
+            <!-- 💬 license.comments: Comentários extras sobre a licença. -->
+            <comments>{{ license.comments }}</comments>
+            {% endif %}
+        </license>
+        {% endfor %}
+    </licenses>
+    {% endif %}
+
+    {% if scm %}
+    <scm>
+        <!-- 🔗 scm.connection: Conexão anônima (read-only) para o sistema de controle de versão. -->
+        <connection>{{ scm.connection }}</connection>
+        <!-- 🔒 scm.developerConnection: Conexão para desenvolvedores (read/write). -->
+        <developerConnection>{{ scm.developerConnection }}</developerConnection>
+        <!-- 🌐 scm.url: URL web para navegar no repositório (por ex., GitHub). -->
+        <url>{{ scm.url }}</url>
+        {% if scm.tag %}
+        <!-- 🔖 scm.tag: Tag ou branch padrão a ser usada (ex.: "master", "v1.0.0"). -->
+        <tag>{{ scm.tag }}</tag>
+        {% endif %}
+    </scm>
+    {% endif %}
+
+    {% if issueManagement %}
+    <issueManagement>
+        <!-- 🐛 issueManagement.system: Nome da ferramenta de rastreamento de issues (ex.: JIRA). -->
+        <system>{{ issueManagement.system }}</system>
+        <!-- 🔗 issueManagement.url: Link para o tracker de issues (ex.: https://issues.example.com). -->
+        <url>{{ issueManagement.url }}</url>
+    </issueManagement>
+    {% endif %}
+
+    {% if ciManagement %}
+    <ciManagement>
+        <!-- 🤖 ciManagement.system: Nome do sistema de Integração Contínua (ex.: Jenkins). -->
+        <system>{{ ciManagement.system }}</system>
+        <!-- 🔗 ciManagement.url: URL para acessar o pipeline CI (ex.: https://ci.example.com). -->
+        <url>{{ ciManagement.url }}</url>
+    </ciManagement>
+    {% endif %}
+
+    {% if mailingLists %}
+    <mailingLists>
+        {% for ml in mailingLists %}
+        <mailingList>
+            <!-- ✉️ ml.name: Nome da lista de e-mails (ex.: dev@example.com). -->
+            <name>{{ ml.name }}</name>
+            <!-- ➕ ml.subscribe: Endereço/caminho para inscrição na lista. -->
+            <subscribe>{{ ml.subscribe }}</subscribe>
+            <!-- ➖ ml.unsubscribe: Endereço/caminho para remoção da lista. -->
+            <unsubscribe>{{ ml.unsubscribe }}</unsubscribe>
+            <!-- 📨 ml.post: Endereço para envio de mensagens à lista. -->
+            <post>{{ ml.post }}</post>
+            <!-- 📦 ml.archive: URL do arquivo de e-mails arquivados. -->
+            <archive>{{ ml.archive }}</archive>
+        </mailingList>
+        {% endfor %}
+    </mailingLists>
+    {% endif %}
+
+
+    {# ----------------------------------------------------------#}
+    {# 👥 (4) Desenvolvedores e Contribuidores                       #}
+    {# ----------------------------------------------------------#}
+
+    {% if developers %}
+    <developers>
+        {% for dev in developers %}
+        <developer>
+            <!-- 🆔 dev.id: Identificador único do desenvolvedor (ex.: user login). -->
+            <id>{{ dev.id }}</id>
+            <!-- 🙍 dev.name: Nome completo do desenvolvedor. -->
+            <name>{{ dev.name }}</name>
+            <!-- 📧 dev.email: E-mail de contato do desenvolvedor. -->
+            <email>{{ dev.email }}</email>
+            {% if dev.organization %}
+            <!-- 🏢 dev.organization: Organização a que o dev pertence (ex.: "Acme Corp"). -->
+            <organization>{{ dev.organization }}</organization>
+            {% endif %}
+            {% if dev.organizationUrl %}
+            <!-- 🌐 dev.organizationUrl: Website da organização do dev. -->
+            <organizationUrl>{{ dev.organizationUrl }}</organizationUrl>
+            {% endif %}
+            {% if dev.roles %}
+            <!-- 🎭 dev.roles: Papéis do desenvolvedor neste projeto (ex.: "Lead", "Maintainer"). -->
+            <roles>
+                {% for role in dev.roles %}
+                <role>{{ role }}</role>
+                {% endfor %}
+            </roles>
+            {% endif %}
+            {% if dev.timezone %}
+            <!-- 🕑 dev.timezone: Fuso horário do desenvolvedor (ex.: "America/Sao_Paulo"). -->
+            <timezone>{{ dev.timezone }}</timezone>
+            {% endif %}
+        </developer>
+        {% endfor %}
+    </developers>
+    {% endif %}
+
+    {% if contributors %}
+    <contributors>
+        {% for contrib in contributors %}
+        <contributor>
+            <!-- 🙋 contrib.name: Nome do contribuinte. -->
+            <name>{{ contrib.name }}</name>
+            <!-- 📧 contrib.email: E-mail do contribuinte. -->
+            <email>{{ contrib.email }}</email>
+            {% if contrib.url %}
+            <!-- 🌐 contrib.url: URL do perfil ou site do contribuinte. -->
+            <url>{{ contrib.url }}</url>
+            {% endif %}
+            {% if contrib.organization %}
+            <!-- 🏢 contrib.organization: Organização do contribuinte. -->
+            <organization>{{ contrib.organization }}</organization>
+            {% endif %}
+            {% if contrib.organizationUrl %}
+            <!-- 🌐 contrib.organizationUrl: Site da organização do contribuinte. -->
+            <organizationUrl>{{ contrib.organizationUrl }}</organizationUrl>
+            {% endif %}
+            {% if contrib.roles %}
+            <!-- 🎭 contrib.roles: Papéis do contribuinte (ex.: "Tester", "Doc Writer"). -->
+            <roles>
+                {% for role in contrib.roles %}
+                <role>{{ role }}</role>
+                {% endfor %}
+            </roles>
+            {% endif %}
+        </contributor>
+        {% endfor %}
+    </contributors>
+    {% endif %}
+
+
+    {# ----------------------------------------------------------#}
+    {# 🔧 (5) Propriedades gerais (properties)                         #}
+    {# ----------------------------------------------------------#}
+    {% if properties %}
+    <properties>
+        {% for key, value in properties.items() %}
+        <!-- 🏷️ {{ key }}: Propriedade definida, pode ser versão de dependência, plugin,
+             codificação, configuração de compilador, etc. -->
+        <{{ key }}>{{ value }}</{{ key }}>
+        {% endfor %}
+    </properties>
+    {% endif %}
+
+
+    {# ----------------------------------------------------------#}
+    {# 📦 (6) Seção de módulos (modules)                               #}
+    {#    Somente para Parent POM que agrupa submódulos               #}
+    {#    Em um BOM puro, geralmente fica vazio ou é omitido.         #}
+    {# ----------------------------------------------------------#}
+    {% if modules %}
+    <modules>
+        {% for module in modules %}
+        <!-- 📁 module: Nome do submódulo (nome da pasta relativa). -->
+        <module>{{ module }}</module>
+        {% endfor %}
+    </modules>
+    {% endif %}
+
+
+    {# ----------------------------------------------------------#}
+    {# 📑 (7) dependencyManagement                                      #}
+    {#    Importante em BOMs para unificar versões de dependências.    #}
+    {#    Em Parent POM, serve para fixar versões que filhos usarão.    #}
+    {# ----------------------------------------------------------#}
+    {% if dependencyManagement %}
+    <dependencyManagement>
+        <dependencies>
+            {% for dep in dependencyManagement %}
+            <dependency>
+                <!-- 🆔 dep.groupId: Grupo da dependência. -->
+                <groupId>{{ dep.groupId }}</groupId>
+                <!-- 📛 dep.artifactId: Artefato da dependência. -->
+                <artifactId>{{ dep.artifactId }}</artifactId>
+                <!-- 🏷️ dep.version: Versão unificada para essa dependência. -->
+                <version>{{ dep.version }}</version>
+                {% if dep.scope %}
+                <!-- ⚙️ dep.scope: Escopo da dependência (ex.: "compile", "test"). -->
+                <scope>{{ dep.scope }}</scope>
+                {% endif %}
+                {% if dep.type %}
+                <!-- 📦 dep.type: Tipo de empacotamento (ex.: "jar", "war"). -->
+                <type>{{ dep.type }}</type>
+                {% endif %}
+                {% if dep.classifier %}
+                <!-- 🏷️ dep.classifier: Classificador para diferenciar artefatos (ex.: "sources"). -->
+                <classifier>{{ dep.classifier }}</classifier>
+                {% endif %}
+            </dependency>
+            {% endfor %}
+        </dependencies>
+    </dependencyManagement>
+    {% endif %}
+
+
+    {# ----------------------------------------------------------#}
+    {# 📚 (8) Seção de dependências diretas (dependencies)               #}
+    {#    - Em um BOM puro, geralmente não há dependências diretas.     #}
+    {#    - Em um Parent POM, podem haver dependências comuns de teste.   #}
+    {# ----------------------------------------------------------#}
+    {% if dependencies %}
+    <dependencies>
+        {% for dep in dependencies %}
+        <dependency>
+            <!-- 🆔 dep.groupId: Grupo da dependência. -->
+            <groupId>{{ dep.groupId }}</groupId>
+            <!-- 📛 dep.artifactId: Artefato a ser incluído. -->
+            <artifactId>{{ dep.artifactId }}</artifactId>
+            {% if dep.version %}
+            <!-- 🏷️ dep.version: Versão específica desta dependência. -->
+            <version>{{ dep.version }}</version>
+            {% endif %}
+            {% if dep.scope %}
+            <!-- ⚙️ dep.scope: Escopo (ex.: "compile", "provided", "runtime", "test"). -->
+            <scope>{{ dep.scope }}</scope>
+            {% endif %}
+            {% if dep.type %}
+            <!-- 📦 dep.type: Tipo (ex.: "jar", "pom", etc.). -->
+            <type>{{ dep.type }}</type>
+            {% endif %}
+            {% if dep.classifier %}
+            <!-- 🏷️ dep.classifier: Classificador (ex.: "sources", "javadoc"). -->
+            <classifier>{{ dep.classifier }}</classifier>
+            {% endif %}
+        </dependency>
+        {% endfor %}
+    </dependencies>
+    {% endif %}
+
+
+    {# ----------------------------------------------------------#}
+    {# 🌐 (9) Repositórios (repositories)                               #}
+    {#    Define locais além do Central para baixar dependências.       #}
+    {# ----------------------------------------------------------#}
+    {% if repositories %}
+    <repositories>
+        {% for repo in repositories %}
+        <repository>
+            <!-- 🆔 repo.id: Identificador deste repositório (ex.: "mulesoft-release"). -->
+            <id>{{ repo.id }}</id>
+            <!-- 🔗 repo.url: URL base para resolução de dependências. -->
+            <url>{{ repo.url }}</url>
+            {% if repo.releases %}
+            <releases>
+                {% if repo.releases.enabled is not none %}
+                <!-- ✅ releases.enabled: Habilita (true) ou desabilita (false) buscas de release. -->
+                <enabled>{{ repo.releases.enabled }}</enabled>
+                {% endif %}
+                {% if repo.releases.updatePolicy %}
+                <!-- 🔄 releases.updatePolicy: Política de atualização (ex.: "always", "daily"). -->
+                <updatePolicy>{{ repo.releases.updatePolicy }}</updatePolicy>
+                {% endif %}
+            </releases>
+            {% endif %}
+            {% if repo.snapshots %}
+            <snapshots>
+                {% if repo.snapshots.enabled is not none %}
+                <!-- ✅ snapshots.enabled: Habilita (true) ou desabilita (false) buscas de snapshot. -->
+                <enabled>{{ repo.snapshots.enabled }}</enabled>
+                {% endif %}
+                {% if repo.snapshots.updatePolicy %}
+                <!-- 🔄 snapshots.updatePolicy: Política de atualização para snapshots. -->
+                <updatePolicy>{{ repo.snapshots.updatePolicy }}</updatePolicy>
+                {% endif %}
+            </snapshots>
+            {% endif %}
+        </repository>
+        {% endfor %}
+    </repositories>
+    {% endif %}
+
+
+    {# ----------------------------------------------------------#}
+    {# 🔌 (10) Plugin Repositories (pluginRepositories)                  #}
+    {#    Para baixar plugins Maven que não estão no repositório central. #}
+    {# ----------------------------------------------------------#}
+    {% if pluginRepositories %}
+    <pluginRepositories>
+        {% for pluginRepo in pluginRepositories %}
+        <pluginRepository>
+            <!-- 🆔 pluginRepo.id: Identificador para repositório de plugins. -->
+            <id>{{ pluginRepo.id }}</id>
+            <!-- 🔗 pluginRepo.url: URL para resolução de plugins. -->
+            <url>{{ pluginRepo.url }}</url>
+            {% if pluginRepo.releases %}
+            <releases>
+                {% if pluginRepo.releases.enabled is not none %}
+                <!-- ✅ releases.enabled: Habilita buscas de release para plugins. -->
+                <enabled>{{ pluginRepo.releases.enabled }}</enabled>
+                {% endif %}
+            </releases>
+            {% endif %}
+            {% if pluginRepo.snapshots %}
+            <snapshots>
+                {% if pluginRepo.snapshots.enabled is not none %}
+                <!-- ✅ snapshots.enabled: Habilita buscas de snapshots para plugins. -->
+                <enabled>{{ pluginRepo.snapshots.enabled }}</enabled>
+                {% endif %}
+            </snapshots>
+            {% endif %}
+        </pluginRepository>
+        {% endfor %}
+    </pluginRepositories>
+    {% endif %}
+
+
+    {# ----------------------------------------------------------#}
+    {# 🛠️ (11) Build (PluginManagement e Plugins)                        #}
+    {#    - PluginManagement: fixar versões de plugins (Parent POM).    #}
+    {#    - Plugins diretos: configurar plugins específicos (opcional).   #}
+    {#    Macro recursiva para renderizar configurações arbitrárias.      #}
+    {# ----------------------------------------------------------#}
+
+    {# 🧩 Macro: render_dict                                            #}
+    {#    Função recursiva que itera sobre dicionários para montar        #}
+    {#    tags XML arbitrárias (<key>valor</key>).                       #}
+    {#    Útil para configurações personalizadas de plugins/executions.  #}
+    {%- macro render_dict(d, indent='        ') -%}
+    {%-   for key, val in d.items() %}
+    {%-     if val is mapping %}
+    {{ indent }}<{{ key }}>
+    {{ render_dict(val, indent + '    ') }}
+    {{ indent }}</{{ key }}>
+    {%-     elif val is iterable and not (val is string) %}
+    {%-       for item in val %}
+    {%-         if item is mapping %}
+    {{ indent }}<{{ key }}>
+    {{ render_dict(item, indent + '    ') }}
+    {{ indent }}</{{ key }}>
+    {%-         else %}
+    {{ indent }}<{{ key }}>{{ item }}</{{ key }}>
+    {%-         endif %}
+    {%-       endfor %}
+    {%-     else %}
+    {{ indent }}<{{ key }}>{{ val }}</{{ key }}>
+    {%-     endif %}
+    {%-   endfor %}
+    {%- endmacro %}
+
+    {% if build %}
+    <build>
+        {% if build.sourceDirectory %}
+        <!-- 📂 sourceDirectory: Caminho das classes fonte (padrão: "src/main/java"). -->
+        <sourceDirectory>{{ build.sourceDirectory }}</sourceDirectory>
+        {% endif %}
+        {% if build.testSourceDirectory %}
+        <!-- 📂 testSourceDirectory: Caminho dos testes (padrão: "src/test/java"). -->
+        <testSourceDirectory>{{ build.testSourceDirectory }}</testSourceDirectory>
+        {% endif %}
+        {% if build.finalName %}
+        <!-- 🏷️ finalName: Nome final do artefato gerado (sem extensão). -->
+        <finalName>{{ build.finalName }}</finalName>
+        {% endif %}
+        {% if build.defaultGoal %}
+        <!-- 🎯 defaultGoal: Meta padrão para este build (por ex.: "install"). -->
+        <defaultGoal>{{ build.defaultGoal }}</defaultGoal>
+        {% endif %}
+
+        {# -------------(11a) PluginManagement (fixa versões) -------------#}
+        {% if build.pluginManagement and build.pluginManagement.plugins %}
+        <pluginManagement>
+            <plugins>
+                {% for p in build.pluginManagement.plugins %}
+                <plugin>
+                    <!-- 🆔 p.groupId: Grupo do plugin (ex.: "org.apache.maven.plugins"). -->
+                    <groupId>{{ p.groupId }}</groupId>
+                    <!-- 📛 p.artifactId: Artefato do plugin (ex.: "maven-compiler-plugin"). -->
+                    <artifactId>{{ p.artifactId }}</artifactId>
+                    <!-- 🏷️ p.version: Versão fixa do plugin (ex.: "3.8.1"). -->
+                    <version>{{ p.version }}</version>
+                    {% if p.extensions is not none %}
+                    <!-- 🔌 p.extensions: Se este plugin estende o ciclo de vida do Maven. -->
+                    <extensions>{{ p.extensions }}</extensions>
+                    {% endif %}
+
+                    {# 🔧 Configuração arbitrária via render_dict #}
+                    {% if p.configuration %}
+                    <configuration>
+{{ render_dict(p.configuration, '                        ') }}
+                    </configuration>
+                    {% endif %}
+
+                    {# 🚀 Executions do plugin (ex.: fases e metas personalizadas) #}
+                    {% if p.executions %}
+                    <executions>
+                        {% for ex in p.executions %}
+                        <execution>
+                            <!-- 🏷️ ex.id: Identificador desta execução (ex.: "default-compile"). -->
+                            <id>{{ ex.id }}</id>
+                            <!-- ⏱️ ex.phase: Fase do ciclo de vida do Maven (ex.: "compile", "test"). -->
+                            <phase>{{ ex.phase }}</phase>
+                            {% if ex.goals %}
+                            <!-- 🎯 ex.goals: Metas a ser executadas (ex.: "compile", "test-compile"). -->
+                            <goals>
+                                {% for g in ex.goals %}
+                                <goal>{{ g }}</goal>
+                                {% endfor %}
+                            </goals>
+                            {% endif %}
+                            {% if ex.configuration %}
+                            <!-- 🔧 ex.configuration: Configuração específica para esta execução. -->
+                            <configuration>
+{{ render_dict(ex.configuration, '                                    ') }}
+                            </configuration>
+                            {% endif %}
+                        </execution>
+                        {% endfor %}
+                    </executions>
+                    {% endif %}
+
+                </plugin>
+                {% endfor %}
+            </plugins>
+        </pluginManagement>
+        {% endif %}
+
+        {# -------------(11b) Plugins diretos (sem fixar versões) -----------#}
+        {% if build.plugins %}
+        <plugins>
+            {% for plugin in build.plugins %}
+            <plugin>
+                <!-- 🆔 plugin.groupId: Grupo do plugin. -->
+                <groupId>{{ plugin.groupId }}</groupId>
+                <!-- 📛 plugin.artifactId: Artefato do plugin. -->
+                <artifactId>{{ plugin.artifactId }}</artifactId>
+                {% if plugin.version %}
+                <!-- 🏷️ plugin.version: Versão específica (opcional). -->
+                <version>{{ plugin.version }}</version>
+                {% endif %}
+                {% if plugin.extensions is not none %}
+                <!-- 🔌 plugin.extensions: Permite que o plugin estenda o ciclo de vida. -->
+                <extensions>{{ plugin.extensions }}</extensions>
+                {% endif %}
+
+                {% if plugin.configuration %}
+                <!-- 🔧 plugin.configuration: Configuração geral do plugin. -->
+                <configuration>
+{{ render_dict(plugin.configuration, '                        ') }}
+                </configuration>
+                {% endif %}
+
+                {% if plugin.executions %}
+                <!-- 🚀 plugin.executions: Definem fases e metas específicas. -->
+                <executions>
+                    {% for ex in plugin.executions %}
+                    <execution>
+                        <id>{{ ex.id }}</id>
+                        <phase>{{ ex.phase }}</phase>
+                        {% if ex.goals %}
+                        <goals>
+                            {% for g in ex.goals %}
+                            <goal>{{ g }}</goal>
+                            {% endfor %}
+                        </goals>
+                        {% endif %}
+                        {% if ex.configuration %}
+                        <configuration>
+{{ render_dict(ex.configuration, '                                    ') }}
+                        </configuration>
+                        {% endif %}
+                    </execution>
+                    {% endfor %}
+                </executions>
+                {% endif %}
+
+            </plugin>
+            {% endfor %}
+        </plugins>
+        {% endif %}
+
+        {# -------------(11c) Recursos opcionais (resources) ---------------#}
+        {% if build.resources %}
+        <resources>
+            {% for res in build.resources %}
+            <resource>
+                <!-- 📁 res.directory: Diretório das resources (ex.: "src/main/resources"). -->
+                <directory>{{ res.directory }}</directory>
+                {% if res.includes %}
+                <!-- ✅ res.includes: Padrões de arquivos a incluir (ex.: "**/*.xml"). -->
+                <includes>
+                    {% for inc in res.includes %}<include>{{ inc }}</include>{% endfor %}
+                </includes>
+                {% endif %}
+                {% if res.excludes %}
+                <!-- ❌ res.excludes: Padrões de arquivos a excluir (ex.: "**/*.bak"). -->
+                <excludes>
+                    {% for exc in res.excludes %}<exclude>{{ exc }}</exclude>{% endfor %}
+                </excludes>
+                {% endif %}
+            </resource>
+            {% endfor %}
+        </resources>
+        {% endif %}
+
+        {% if build.testResources %}
+        <testResources>
+            {% for tres in build.testResources %}
+            <testResource>
+                <!-- 📁 tres.directory: Diretório de test resources (ex.: "src/test/resources"). -->
+                <directory>{{ tres.directory }}</directory>
+                {% if tres.includes %}
+                <includes>
+                    {% for inc in tres.includes %}<include>{{ inc }}</include>{% endfor %}
+                </includes>
+                {% endif %}
+                {% if tres.excludes %}
+                <excludes>
+                    {% for exc in tres.excludes %}<exclude>{{ exc }}</exclude>{% endfor %}
+                </excludes>
+                {% endif %}
+            </testResource>
+            {% endfor %}
+        </testResources>
+        {% endif %}
+
+    </build>
+    {% endif %}
+
+
+    {# ----------------------------------------------------------#}
+    {# 📊 (12) Reporting (relatórios)                                   #}
+    {#    Caso gere relatórios (Cobertura, Checkstyle, Javadoc, etc.).   #}
+    {# ----------------------------------------------------------#}
+    {% if reporting %}
+    <reporting>
+        {% if reporting.excludeDefaults is not none %}
+        <!-- ❌ excludeDefaults: Impede plugins padrão de geração de relatórios. -->
+        <excludeDefaults>{{ reporting.excludeDefaults }}</excludeDefaults>
+        {% endif %}
+        {% if reporting.plugins %}
+        <plugins>
+            {% for rplugin in reporting.plugins %}
+            <plugin>
+                <!-- 🆔 rplugin.groupId: Grupo do plugin de relatório (ex.: "org.apache.maven.plugins"). -->
+                <groupId>{{ rplugin.groupId }}</groupId>
+                <!-- 📛 rplugin.artifactId: Artefato do plugin (ex.: "maven-surefire-report-plugin"). -->
+                <artifactId>{{ rplugin.artifactId }}</artifactId>
+                {% if rplugin.version %}
+                <!-- 🏷️ rplugin.version: Versão do plugin de relatório. -->
+                <version>{{ rplugin.version }}</version>
+                {% endif %}
+                {% if rplugin.configuration %}
+                <!-- 🔧 rplugin.configuration: Configurações específicas (ex.: formato do relatório). -->
+                <configuration>
+                    {% for key, val in rplugin.configuration.items() %}
+                    <{{ key }}>{{ val }}</{{ key }}>
+                    {% endfor %}
+                </configuration>
+                {% endif %}
+                {% if rplugin.dependencies %}
+                <!-- 📦 rplugin.dependencies: Dependências necessárias para o plugin de relatório. -->
+                <dependencies>
+                    {% for rpdep in rplugin.dependencies %}
+                    <dependency>
+                        <groupId>{{ rpdep.groupId }}</groupId>
+                        <artifactId>{{ rpdep.artifactId }}</artifactId>
+                        <version>{{ rpdep.version }}</version>
+                        {% if rpdep.scope %}
+                        <scope>{{ rpdep.scope }}</scope>
+                        {% endif %}
+                    </dependency>
+                    {% endfor %}
+                </dependencies>
+                {% endif %}
+            </plugin>
+            {% endfor %}
+        </plugins>
+        {% endif %}
+    </reporting>
+    {% endif %}
+
+
+    {# ----------------------------------------------------------#}
+    {# 🚚 (13) DistributionManagement (distribuição)                      #}
+    {#    Define onde publicar releases e snapshots do BOM/Parent.        #}
+    {# ----------------------------------------------------------#}
+    {% if distributionManagement %}
+    <distributionManagement>
+        {% if distributionManagement.repository %}
+        <repository>
+            <!-- 🆔 repository.id: Identificador do repositório de release. -->
+            <id>{{ distributionManagement.repository.id }}</id>
+            <!-- 📛 repository.name: Nome legível (ex.: "Acme Release Repo"). -->
+            <name>{{ distributionManagement.repository.name }}</name>
+            <!-- 🔗 repository.url: URL para publicar releases. -->
+            <url>{{ distributionManagement.repository.url }}</url>
+            {% if distributionManagement.repository.layout %}
+            <!-- 🗂️ repository.layout: Layout (ex.: "default", "legacy"). -->
+            <layout>{{ distributionManagement.repository.layout }}</layout>
+            {% endif %}
+        </repository>
+        {% endif %}
+        {% if distributionManagement.snapshotRepository %}
+        <snapshotRepository>
+            <!-- 🆔 snapshotRepository.id: Identificador do repositório de snapshots. -->
+            <id>{{ distributionManagement.snapshotRepository.id }}</id>
+            <!-- 📛 snapshotRepository.name: Nome legível do repositório de snapshots. -->
+            <name>{{ distributionManagement.snapshotRepository.name }}</name>
+            <!-- 🔗 snapshotRepository.url: URL para publicar snapshots. -->
+            <url>{{ distributionManagement.snapshotRepository.url }}</url>
+            {% if distributionManagement.snapshotRepository.layout %}
+            <!-- 🗂️ snapshotRepository.layout: Layout do repositório (ex.: "default"). -->
+            <layout>{{ distributionManagement.snapshotRepository.layout }}</layout>
+            {% endif %}
+        </snapshotRepository>
+        {% endif %}
+        {% if distributionManagement.site %}
+        <site>
+            <!-- 🆔 site.id: Identificador do site de distribuição de artefatos. -->
+            <id>{{ distributionManagement.site.id }}</id>
+            <!-- 📛 site.name: Nome legível para o site (ex.: "Website do Projeto"). -->
+            <name>{{ distributionManagement.site.name }}</name>
+            <!-- 🔗 site.url: URL do site público ou privado. -->
+            <url>{{ distributionManagement.site.url }}</url>
+        </site>
+        {% endif %}
+        {% if distributionManagement.directory %}
+        <!-- 📁 directory: Diretório local onde artefatos podem ser empacotados. -->
+        <directory>{{ distributionManagement.directory }}</directory>
+        {% endif %}
+    </distributionManagement>
+    {% endif %}
+
+
+    {# ----------------------------------------------------------#}
+    {# 🎯 (14) Profiles de build (profiles)                              #}
+    {#    Permitem variações de build dependendo de propriedades, CI,    #}
+    {#    sistema operacional ou ativadores específicos.                  #}
+    {# ----------------------------------------------------------#}
+    {% if profiles %}
+    <profiles>
+        {% for profile in profiles %}
+        <profile>
+            <!-- 🏷️ profile.id: Identificador único do perfil (ex.: "ci", "release"). -->
+            <id>{{ profile.id }}</id>
+
+            {% if profile.activation %}
+            <activation>
+                {% for key, val in profile.activation.items() %}
+                <!-- 🔄 profile.activation: Definições de ativação (ex.: os.name, property, jdk). -->
+                <{{ key }}>{{ val }}</{{ key }}>
+                {% endfor %}
+            </activation>
+            {% endif %}
+
+            {% if profile.properties %}
+            <properties>
+                {% for key, val in profile.properties.items() %}
+                <!-- 🏷️ profile.properties: Propriedades específicas para este perfil. -->
+                <{{ key }}>{{ val }}</{{ key }}>
+                {% endfor %}
+            </properties>
+            {% endif %}
+
+            {% if profile.dependencyManagement %}
+            <dependencyManagement>
+                <dependencies>
+                    {% for dep in profile.dependencyManagement %}
+                    <dependency>
+                        <groupId>{{ dep.groupId }}</groupId>
+                        <artifactId>{{ dep.artifactId }}</artifactId>
+                        <version>{{ dep.version }}</version>
+                        {% if dep.scope %}
+                        <scope>{{ dep.scope }}</scope>
+                        {% endif %}
+                    </dependency>
+                    {% endfor %}
+                </dependencies>
+            </dependencyManagement>
+            {% endif %}
+
+            {% if profile.dependencies %}
+            <dependencies>
+                {% for dep in profile.dependencies %}
+                <dependency>
+                    <groupId>{{ dep.groupId }}</groupId>
+                    <artifactId>{{ dep.artifactId }}</artifactId>
+                    <version>{{ dep.version }}</version>
+                    {% if dep.scope %}
+                    <scope>{{ dep.scope }}</scope>
+                    {% endif %}
+                </dependency>
+                {% endfor %}
+            </dependencies>
+            {% endif %}
+
+            {% if profile.build %}
+            <build>
+                {% if profile.build.plugins %}
+                <plugins>
+                    {% for p in profile.build.plugins %}
+                    <plugin>
+                        <groupId>{{ p.groupId }}</groupId>
+                        <artifactId>{{ p.artifactId }}</artifactId>
+                        <version>{{ p.version }}</version>
+                        {% if p.configuration %}
+                        <!-- 🔧 p.configuration: Configuração específica de plugin para este perfil. -->
+                        <configuration>
+                            {% for key, val in p.configuration.items() %}
+                            <{{ key }}>{{ val }}</{{ key }}>
+                            {% endfor %}
+                        </configuration>
+                        {% endif %}
+                    </plugin>
+                    {% endfor %}
+                </plugins>
+                {% endif %}
+            </build>
+            {% endif %}
+        </profile>
+        {% endfor %}
+    </profiles>
+    {% endif %}
+
+</project>
