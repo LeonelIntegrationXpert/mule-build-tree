@@ -39,7 +39,7 @@
     <!-- 📛 parent.artifactId: Nome do POM pai. -->
     <artifactId>extensions-parent</artifactId>
     <!-- 🏷️ parent.version: Versão do POM pai. -->
-    <version>1.0.2</version>
+    <version>1.0.0</version>
   </parent>
   <dependencies>
     <dependency>

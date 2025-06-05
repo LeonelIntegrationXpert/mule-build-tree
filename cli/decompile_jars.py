@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-🛠️ Universal Java Decompiler – v4.1 (refatorado para ficar dentro de decode_projects)
+🛠️ Universal Java Decompiler – v4.1 (refatorado com multithreading dentro de decode_projects)
 ───────────────────────────────────────────────────────────────────────
 • Extrai todos os *.jar* em **decode_projects/jars**
 • Decompila classes (ignora inner classes com "$" no nome)
@@ -9,7 +9,7 @@
 • Move projetos decompilados para **decode_projects/projects/**
 • Remove diretórios temporários após cada JAR
 • Logging estruturado com cores e níveis de severidade
-• Cria pastas faltantes automaticamente
+• Suporte a multithreading para processar múltiplos JARs em paralelo
 ───────────────────────────────────────────────────────────────────────
 """
 import re
@@ -21,6 +21,7 @@ import argparse
 import logging
 from pathlib import Path
 from xml.etree import ElementTree as ET
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # ─────────────── ANSI CORES PARA LOG ───────────────
 class _AnsiColor:
@@ -48,6 +49,7 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 logger.setLevel(logging.INFO)
 
+# ─────────────── FUNÇÕES DE LOG ───────────────
 def _log_status(msg: str, colour: str = _AnsiColor.CYAN, icon: str = "🔹") -> None:
     logger.info(f"{colour}{icon} {msg}{_AnsiColor.RESET}")
 
@@ -72,14 +74,15 @@ def _derive_coordinates(jar_name: str) -> tuple[str, str, str]:
     version = m.group("ver") if m else "1.0.0"
     return "com.decompiled", artifact, version
 
+
 def _generate_minimal_pom(group: str, artifact: str, version: str) -> str:
     """
     Gera um pom.xml mínimo baseado em coordenadas.
     """
-    return f"""<project xmlns="http://maven.apache.org/POM/4.0.0"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    return f"""<project xmlns=\"http://maven.apache.org/POM/4.0.0\"
+      xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
+      xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0
+      http://maven.apache.org/xsd/maven-4.0.0.xsd\">
   <modelVersion>4.0.0</modelVersion>
   <groupId>{group}</groupId>
   <artifactId>{artifact}</artifactId>
@@ -88,6 +91,7 @@ def _generate_minimal_pom(group: str, artifact: str, version: str) -> str:
   <name>{artifact} (Decompiled)</name>
 </project>
 """
+
 
 def _extract_jar(jar_path: Path, temp_dir: Path) -> None:
     """
@@ -108,6 +112,7 @@ def _extract_jar(jar_path: Path, temp_dir: Path) -> None:
         _log_error(f"Falha ao extrair '{jar_path.name}': arquivo corrompido.")
         raise
 
+
 def _decompile_classes(temp_dir: Path, output_dir: Path, cfr_jar: Path, verbose: bool) -> None:
     """
     Para cada .class em temp_dir (ignorando inner classes), invoca o CFR e
@@ -125,6 +130,7 @@ def _decompile_classes(temp_dir: Path, output_dir: Path, cfr_jar: Path, verbose:
         if proc.returncode != 0:
             _log_warning(f"Erro ao decompilar '{class_file.relative_to(temp_dir)}'")
 
+
 def _copy_or_generate_pom(temp_dir: Path, project_dir: Path, jar_name: str) -> None:
     """
     Copia o pom.xml encontrado em META-INF/maven, ou gera um POM mínimo caso não exista.
@@ -140,6 +146,7 @@ def _copy_or_generate_pom(temp_dir: Path, project_dir: Path, jar_name: str) -> N
         (project_dir / "pom.xml").write_text(content, encoding="utf-8")
         _log_success("pom.xml mínimo gerado (não encontrado no JAR)")
 
+
 def _move_project(output_dir: Path, projects_dir: Path, project_name: str) -> None:
     """
     Move a pasta 'project_name' de output_dir para projects_dir.
@@ -152,6 +159,7 @@ def _move_project(output_dir: Path, projects_dir: Path, project_name: str) -> No
     shutil.move(str(source), str(dest))
     _log_status(f"Projeto '{project_name}' movido para '{projects_dir}'", _AnsiColor.GREEN, "📂")
 
+
 def _clean_directory(path: Path) -> None:
     """
     Remove o diretório 'path', caso exista. Silencia erros.
@@ -163,45 +171,80 @@ def _clean_directory(path: Path) -> None:
     except Exception as e:
         _log_warning(f"Falha ao remover '{path}': {e}")
 
+# ─────────────── FUNÇÃO QUE PROCESSA UM JAR ───────────────
+def process_jar(jar_path: Path, cfr_jar: Path, base_dir: Path, output_base: Path, projects_dir: Path, verbose: bool) -> None:
+    project_name       = jar_path.stem.replace(" ", "_")
+    temp_classes_dir   = base_dir / "classes" / project_name
+    project_output_dir = output_base / project_name
+
+    # Limpa qualquer resquício anterior
+    _clean_directory(temp_classes_dir)
+    _clean_directory(project_output_dir)
+
+    # 1) Extrai classes (sem inner classes)
+    try:
+        temp_classes_dir.mkdir(parents=True, exist_ok=True)
+        _extract_jar(jar_path, temp_classes_dir)
+    except Exception:
+        _log_warning(f"Pulando JAR '{jar_path.name}' devido a erro na extração.")
+        _clean_directory(temp_classes_dir)
+        return
+
+    # 2) Decompila classes
+    try:
+        project_output_dir.mkdir(parents=True, exist_ok=True)
+        _log_status(f"Iniciando decompilação de '{project_name}'", _AnsiColor.CYAN, "🔧")
+        _decompile_classes(temp_classes_dir, project_output_dir, cfr_jar, verbose)
+    except Exception as e:
+        _log_warning(f"Falha ao decompilar '{project_name}': {e}")
+
+    # 3) Copia ou gera pom.xml
+    try:
+        _copy_or_generate_pom(temp_classes_dir, project_output_dir, jar_path.name)
+    except Exception as e:
+        _log_warning(f"Não foi possível tratar pom.xml para '{project_name}': {e}")
+
+    # 4) Move projeto decompilado para pasta final
+    try:
+        _move_project(output_base, projects_dir, project_name)
+    except Exception as e:
+        _log_warning(f"Falha ao mover projeto '{project_name}': {e}")
+
+    # 5) Remove diretório temporário de classes
+    _clean_directory(temp_classes_dir)
+
 # ─────────────── FUNÇÃO MAIN ───────────────
 def main():
     parser = argparse.ArgumentParser(
-        description="Universal Java Decompiler – v4.1 (refatorado para ficar em decode_projects)",
+        description="Universal Java Decompiler – v4.1 com multithreading",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     parser.add_argument(
-        "--base-dir",
-        type=Path,
-        default=DEFAULT_BASE_DIR,
+        "--base-dir", type=Path, default=DEFAULT_BASE_DIR,
         help="Diretório base que contém 'jars', 'cfr-*.jar' e subpastas."
     )
     parser.add_argument(
-        "--jar-dir",
-        type=Path,
-        default=DEFAULT_JAR_DIR,
+        "--jar-dir", type=Path, default=DEFAULT_JAR_DIR,
         help="Subdiretório onde estão os arquivos .jar a serem decompilados."
     )
     parser.add_argument(
-        "--cfr-jar",
-        type=Path,
-        default=DEFAULT_CFR_JAR_PATH,
+        "--cfr-jar", type=Path, default=DEFAULT_CFR_JAR_PATH,
         help="Caminho completo para o JAR do CFR decompilador."
     )
     parser.add_argument(
-        "--output-dir",
-        type=Path,
-        default=DEFAULT_OUTPUT_DIR,
+        "--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR,
         help="Pasta temporária onde ficam os projetos decompilados antes de mover."
     )
     parser.add_argument(
-        "--projects-dir",
-        type=Path,
-        default=DEFAULT_PROJECTS_DIR,
+        "--projects-dir", type=Path, default=DEFAULT_PROJECTS_DIR,
         help="Pasta final onde os projetos decompilados serão salvos (decode_projects/projects)."
     )
     parser.add_argument(
-        "--verbose",
-        action="store_true",
+        "--threads", type=int, default=4,
+        help="Número de threads para processar JARs em paralelo."
+    )
+    parser.add_argument(
+        "--verbose", action="store_true",
         help="Mostra saída completa dos subprocessos de decompilação."
     )
     args = parser.parse_args()
@@ -212,31 +255,24 @@ def main():
     OUTPUT_DIR   = args.output_dir.resolve()
     PROJECTS_DIR = args.projects_dir.resolve()
     VERBOSE      = args.verbose
+    THREADS      = max(1, args.threads)
 
     _log_status("🛠️ Iniciando Universal Java Decompiler – v4.1", _AnsiColor.CYAN, "🚀")
 
-    # ─── Cria as pastas principais (caso não existam) ──────────────────
-    try:
-        BASE_DIR.mkdir(parents=True, exist_ok=True)
-        _log_status(f"Pasta base garantida: {BASE_DIR}", _AnsiColor.GREEN, "📁")
-    except Exception as e:
-        _log_error(f"Não foi possível criar BASE_DIR '{BASE_DIR}': {e}")
-        sys.exit(1)
+    # ─── Cria as pastas principais ──────────────────
+    for pdir, desc in [(BASE_DIR, "pasta base"), (JAR_DIR, "pasta de JARs"), (OUTPUT_DIR, "pasta temporária"), (PROJECTS_DIR, "pasta final de projetos")]:
+        try:
+            pdir.mkdir(parents=True, exist_ok=True)
+            _log_status(f"{desc.capitalize()} garantida: {pdir}", _AnsiColor.GREEN, "📁")
+        except Exception as e:
+            _log_error(f"Não foi possível criar {desc} '{pdir}': {e}")
+            sys.exit(1)
 
-    try:
-        JAR_DIR.mkdir(parents=True, exist_ok=True)
-        _log_status(f"Pasta de JARs garantida: {JAR_DIR}", _AnsiColor.GREEN, "📁")
-    except Exception as e:
-        _log_error(f"Não foi possível criar JAR_DIR '{JAR_DIR}': {e}")
-        sys.exit(1)
-
-    # Verifica se o CFR JAR realmente existe (não criamos automaticamente)
+    # Verifica CFR e Java
     if not CFR_JAR.is_file():
         _log_error(f"CFR JAR não encontrado em: {CFR_JAR}")
         _log_status("Coloque 'cfr-0.152.jar' dentro de 'decode_projects/' ou use --cfr-jar", _AnsiColor.YELLOW, "ℹ️")
         sys.exit(1)
-
-    # Verifica se o Java está disponível no PATH
     try:
         subprocess.run(["java", "-version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
         _log_success("Java encontrado no PATH")
@@ -244,73 +280,28 @@ def main():
         _log_error("Java não encontrado no PATH")
         sys.exit(1)
 
-    # Cria diretórios de saída
-    try:
-        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-        _log_status(f"Pasta temporária garantida: {OUTPUT_DIR}", _AnsiColor.GREEN, "📁")
-    except Exception as e:
-        _log_error(f"Não foi possível criar OUTPUT_DIR '{OUTPUT_DIR}': {e}")
-        sys.exit(1)
-
-    try:
-        PROJECTS_DIR.mkdir(parents=True, exist_ok=True)
-        _log_status(f"Pasta final de projetos garantida: {PROJECTS_DIR}", _AnsiColor.GREEN, "📁")
-    except Exception as e:
-        _log_error(f"Não foi possível criar PROJECTS_DIR '{PROJECTS_DIR}': {e}")
-        sys.exit(1)
-
-    # ─── Lista todos os JARs a processar ───────────────────────────────
+    # ─── Lista todos os JARs a processar ─────────────────
     jars = sorted(JAR_DIR.glob("*.jar"))
     if not jars:
         _log_warning("Nenhum arquivo .jar encontrado em 'decode_projects/jars/'.")
         _log_status("Coloque seus .jar em 'decode_projects/jars/' e execute novamente.", _AnsiColor.YELLOW, "ℹ️")
         sys.exit(0)
 
-    # ─── Processa cada JAR individualmente ────────────────────────────
-    for jar_path in jars:
-        project_name       = jar_path.stem.replace(" ", "_")
-        temp_classes_dir   = BASE_DIR / "classes" / project_name
-        project_output_dir = OUTPUT_DIR / project_name
+    _log_status(f"Total de JARs encontrados: {len(jars)}", _AnsiColor.CYAN, "📦")
 
-        # Limpa qualquer resquício anterior
-        _clean_directory(temp_classes_dir)
-        _clean_directory(project_output_dir)
+    # ─── Processa cada JAR em threads ─────────────────
+    with ThreadPoolExecutor(max_workers=THREADS) as executor:
+        futures = {executor.submit(process_jar, jar, CFR_JAR, BASE_DIR, OUTPUT_DIR, PROJECTS_DIR, VERBOSE): jar for jar in jars}
+        for future in as_completed(futures):
+            jar = futures[future]
+            try:
+                future.result()
+                _log_success(f"Concluído processamento de '{jar.name}'")
+            except Exception as e:
+                _log_error(f"Erro no processamento de '{jar.name}': {e}")
 
-        # 1) Extrai classes (sem inner classes)
-        try:
-            temp_classes_dir.mkdir(parents=True, exist_ok=True)
-            _extract_jar(jar_path, temp_classes_dir)
-        except Exception:
-            _log_warning(f"Pulando JAR '{jar_path.name}' devido a erro na extração.")
-            _clean_directory(temp_classes_dir)
-            continue
-
-        # 2) Decompila classes
-        try:
-            project_output_dir.mkdir(parents=True, exist_ok=True)
-            _log_status(f"Iniciando decompilação de '{project_name}'", _AnsiColor.CYAN, "🔧")
-            _decompile_classes(temp_classes_dir, project_output_dir, CFR_JAR, VERBOSE)
-        except Exception as e:
-            _log_warning(f"Falha ao decompilar '{project_name}': {e}")
-
-        # 3) Copia ou gera pom.xml
-        try:
-            _copy_or_generate_pom(temp_classes_dir, project_output_dir, jar_path.name)
-        except Exception as e:
-            _log_warning(f"Não foi possível tratar pom.xml para '{project_name}': {e}")
-
-        # 4) Move projeto decompilado para pasta final (dentro de decode_projects/projects/)
-        try:
-            _move_project(OUTPUT_DIR, PROJECTS_DIR, project_name)
-        except Exception as e:
-            _log_warning(f"Falha ao mover projeto '{project_name}': {e}")
-
-        # 5) Remove diretório temporário de classes
-        _clean_directory(temp_classes_dir)
-
-    # Após todos os JARs, limpa o OUTPUT_DIR (que estava em decode_projects/decompiled/)
+    # Após todos os JARs, limpa o OUTPUT_DIR
     _clean_directory(OUTPUT_DIR)
-
     _log_success("Processamento concluído com sucesso!")
 
 if __name__ == "__main__":

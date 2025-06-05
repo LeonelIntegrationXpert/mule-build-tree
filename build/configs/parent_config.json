@@ -1,7 +1,7 @@
 {
   "modelVersion": "4.0.0",
   "artifactId": "extensions-parent",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "packaging": "pom",
   "name": "Parent POM for MuleSoft Extensions",
   "description": "🚀 Parent POM que centraliza build, testes (MUnit) e deploy no CloudHub 2.0, garantindo consistência e boas práticas DevOps.",

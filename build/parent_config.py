@@ -1,12 +1,24 @@
-from imports import *
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Renderiza Parent-POM a partir de template + JSON, usando a versão exata do JSON (não incrementa).
+"""
+from build.imports import *  # noqa: F403, F401
+from jinja2 import Environment, FileSystemLoader, select_autoescape
+import argparse
+import json
+import sys
+from pathlib import Path
 
+# Padrões
 DEFAULT_JSON = DEFAULT_PARENT_JSON
-DEFAULT_TPL = DEFAULT_PARENT_TPL
-DEFAULT_OUT = DEFAULT_PARENT_OUT
+DEFAULT_TPL  = DEFAULT_PARENT_TPL
+DEFAULT_OUT  = DEFAULT_PARENT_OUT
 
 # ═══ Helpers ═══
+
 def _dict_to_xml(value: Any, indent: str = "    ", lvl: int = 0) -> str:
-    """Converte recursivamente *dict* / *list* em blocos XML."""
+    """Converte recursivamente dict/list em blocos XML."""
     pad = indent * lvl
     if isinstance(value, dict):
         parts: list[str] = []
@@ -23,7 +35,7 @@ def _dict_to_xml(value: Any, indent: str = "    ", lvl: int = 0) -> str:
 
 
 def _pretty_xml(raw: str, indent: int = 4) -> str:
-    """Aplica *pretty‑print* ao XML mantendo declaração e espaços."""
+    """Aplica pretty-print ao XML mantendo declaração e espaços."""
     try:
         from xml.dom.minidom import parseString
         parsed = parseString(raw)
@@ -35,9 +47,10 @@ def _pretty_xml(raw: str, indent: int = 4) -> str:
 
 
 # ═══ Main ═══
+
 def main() -> None:
     parser = argparse.ArgumentParser(
-        "Renderiza Parent‑POM a partir de template + JSON",
+        "Renderiza Parent-POM a partir de template + JSON",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument("--json", "-j", type=Path, default=DEFAULT_JSON,
@@ -50,17 +63,19 @@ def main() -> None:
                         help="Qtd. de espaços por nível de indentação")
     args = parser.parse_args()
 
+    # Verificações de existência
     if not args.json.is_file():
         sys.exit(f"❌ Arquivo JSON não encontrado: {args.json}")
     if not args.tpl.is_file():
         sys.exit(f"❌ Template Jinja não encontrado: {args.tpl}")
 
-    # 🔢 Carrega JSON e injeta groupId
+    # Carrega JSON sem alterar a versão
     data = json.loads(args.json.read_text(encoding="utf-8"))
     data["groupId"] = ORG_ID
     if "parent" in data:
         data["parent"]["groupId"] = ORG_ID
 
+    # Configura Jinja com filtro dict2xml
     env = Environment(
         loader=FileSystemLoader(str(args.tpl.parent)),
         autoescape=select_autoescape(disabled_extensions=("jinja", "template")),
@@ -69,9 +84,11 @@ def main() -> None:
     )
     env.filters["dict2xml"] = lambda v, indent=" ": _dict_to_xml(v, " " * args.indent)
 
-    rendered_raw = env.get_template(args.tpl.name).render(**data)
+    # Render e formatação
+    rendered_raw    = env.get_template(args.tpl.name).render(**data)
     rendered_pretty = _pretty_xml(rendered_raw, indent=args.indent)
 
+    # Garante diretório de saída
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(rendered_pretty, encoding="utf-8")
     print(f"\n✅ pom.xml gerado com sucesso em: {args.out}\n")

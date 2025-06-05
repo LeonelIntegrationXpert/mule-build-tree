@@ -1,105 +1,52 @@
 {
-  "developers": [
-    {
-      "id": "leonel.d.porto",
-      "name": "Leonel Dorneles Porto",
-      "email": "leoneldornelesporto@outlook.com.br",
-      "organization": "Accenture",
-      "organizationUrl": "https://www.accenture.com"
-    }
-  ],
   "projects": [
     {
       "name": "api-gateway-http-policy-attributes-extension",
-      "path": "../api-gateway-http-policy-attributes-extension",
+      "path": "../../projects/api-gateway-http-policy-attributes-extension",
+      "groupId": "806818a4-2582-4d63-a6ef-021f493715a0",
+      "artifactId": "api-gateway-http-policy-attributes-extension",
+      "version": "1.0.60",
+      "displayName": "api-gateway-http-policy-attributes-extension",
+      "description": "",
+      "url": "",
+      "inceptionYear": "",
       "jdk": "8",
       "maven": "3.9.5",
       "goal": "clean deploy -DskipTests",
       "deploy": true,
-      "version": "1.0.60",
+      "depends_on": [],
       "dependencies": [
         {
           "groupId": "org.mule.connectors",
           "artifactId": "mule-http-connector",
-          "classifier": "mule-plugin"
-        }
-      ]
-    },
-    {
-      "name": "mule-module-global-config",
-      "path": "../mule-module-global-config",
-      "jdk": "17",
-      "maven": "3.9.6",
-      "goal": "clean deploy -DskipTests",
-      "deploy": true,
-      "version": "1.0.7"
-    },
-    {
-      "name": "openair-connector-1.0.2",
-      "path": "../../projects/openair-connector-1.0.2",
-      "groupId": "org.mule.tools.devkit",
-      "artifactId": "mule-devkit-shade",
-      "version": "3.9.0",
-      "displayName": "Mule DevKit Shaded Module",
-      "jdk": "8",
-      "maven": "3.9.5",
-      "goal": "clean deploy -DskipTests",
-      "deploy": true,
-      "dependencies": [
-        {
-          "groupId": "junit",
-          "artifactId": "junit",
-          "version": "4.11",
-          "scope": "test",
-          "optional": null
-        },
-        {
-          "groupId": "org.mule",
-          "artifactId": "mule-core",
-          "version": "${mule.version}",
-          "scope": "provided",
-          "optional": null
-        },
-        {
-          "groupId": "org.mule.modules",
-          "artifactId": "mule-module-devkit-support",
-          "version": "${mule.version}",
-          "scope": "provided",
-          "optional": null
-        },
-        {
-          "groupId": "org.mule.transports",
-          "artifactId": "mule-transport-http",
-          "version": "${mule.version}",
-          "scope": "provided",
-          "optional": null
-        },
-        {
-          "groupId": "org.mule.modules",
-          "artifactId": "mule-module-ws",
-          "version": "${mule.version}",
-          "scope": "provided",
-          "optional": null
-        },
-        {
-          "groupId": "dom4j",
-          "artifactId": "dom4j",
-          "version": "1.6.1",
-          "scope": "provided",
-          "optional": null
+          "version": "",
+          "classifier": "mule-plugin",
+          "scope": "",
+          "optional": ""
         }
       ],
       "developers": [],
+      "contributors": [],
       "parent": {
-        "groupId": "org.mule.tools.devkit",
-        "artifactId": "mule-devkit",
-        "version": "3.9.0"
+        "groupId": "806818a4-2582-4d63-a6ef-021f493715a0",
+        "artifactId": "extensions-parent",
+        "version": "1.0.3"
       },
+      "organization": null,
+      "licenses": [],
+      "scm": null,
+      "issueManagement": null,
+      "ciManagement": null,
+      "mailingLists": [],
+      "modules": [],
       "properties": {},
       "dependencyManagement": [],
       "repositories": [],
       "pluginRepositories": [],
-      "distributionManagement": null
+      "distributionManagement": null,
+      "build": null,
+      "reporting": null,
+      "profiles": []
     }
   ]
 }

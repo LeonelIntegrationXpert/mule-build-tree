@@ -19,6 +19,7 @@ __pycache__/
 .venv/
 env/
 venv/
+tooling/jdks/*.zip
 
 # Byte-compiled / optimized / DLL files
 *.pyc

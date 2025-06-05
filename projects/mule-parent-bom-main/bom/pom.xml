@@ -23,7 +23,7 @@
   <!-- 🏷️ version: Versão deste artefato.
          Pode seguir semver: "1.0.0", "2.5.3-SNAPSHOT", etc.
          "-SNAPSHOT" indica versão em desenvolvimento, não release. -->
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <!-- 📦 packaging: Tipo de empacotamento.
          "pom" para BOMs ou Parent POMs.
          Outros exemplos: "jar", "war", "ear".

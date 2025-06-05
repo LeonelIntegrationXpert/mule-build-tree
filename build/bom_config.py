@@ -4,6 +4,7 @@
 from imports import *
 
 # ─── Helper de formatação XML ─────────────────────────────────
+
 def _pretty_xml(raw: str, indent: int = 2) -> str:
     """
     Indenta o XML usando minidom, depois:
@@ -46,6 +47,7 @@ if not TEMPLATE_PATH.exists():
     sys.exit(1)
 
 # 🔢 Carrega dados JSON e injeta groupId
+# Não altera a versão; usa exatamente a que está no JSON
 data = json.loads(JSON_PATH.read_text(encoding="utf-8"))
 data["groupId"] = ORG_ID
 

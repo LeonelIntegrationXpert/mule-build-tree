@@ -1,1 +1,0 @@
-package org.mule.runtime.globalconfig.api.maven;

@@ -1,121 +1,125 @@
 {
-  "modelVersion": "4.0.0",
-  "groupId": "org.mule.extensions",
-  "artifactId": "mule-extensions-bom",
-  "version": "1.0.1",
-  "packaging": "pom",
-  "name": "BOM for MuleSoft Extensions",
-  "parent": {
+    "modelVersion": "4.0.0",
     "groupId": "org.mule.extensions",
-    "artifactId": "mule-modules-parent",
-    "version": "1.1.3"
-  },
-  "properties": {
-    "project.build.sourceEncoding": "UTF-8",
-    "muleHttpConnectorVersion": "1.1.1",
-    "muleCoreEeVersion": "4.4.0",
-    "muleAgentConfigurationVersion": "2.7.3",
-    "snakeyamlVersion": "1.29",
-    "muleModulePluginEeVersion": "4.4.0",
-    "junitVersion": "4.13.2",
-    "mockitoAllVersion": "1.10.19",
-    "log4jApiVersion": "2.17.1"
-  },
-  "dependencyManagement": [
-    {
-      "groupId": "org.mule.connectors",
-      "artifactId": "mule-http-connector",
-      "version": "${muleHttpConnectorVersion}",
-      "classifier": "mule-plugin",
-      "scope": "compile"
+    "artifactId": "mule-extensions-bom",
+    "version": "1.0.3",
+    "packaging": "pom",
+    "name": "BOM for MuleSoft Extensions",
+    "parent": {
+        "groupId": "org.mule.extensions",
+        "artifactId": "mule-modules-parent",
+        "version": "1.1.3"
     },
-    {
-      "groupId": "com.mulesoft.mule.runtime",
-      "artifactId": "mule-core-ee",
-      "version": "${muleCoreEeVersion}",
-      "scope": "compile"
+    "properties": {
+        "project.build.sourceEncoding": "UTF-8",
+        "muleHttpConnectorVersion": "1.1.1",
+        "muleCoreEeVersion": "4.4.0",
+        "muleAgentConfigurationVersion": "2.7.3",
+        "snakeyamlVersion": "1.29",
+        "muleModulePluginEeVersion": "4.4.0",
+        "junitVersion": "4.13.2",
+        "mockitoAllVersion": "1.10.19",
+        "log4jApiVersion": "2.17.1"
     },
-    {
-      "groupId": "com.mulesoft.agent",
-      "artifactId": "mule-agent-configuration",
-      "version": "${muleAgentConfigurationVersion}",
-      "scope": "compile"
+    "dependencyManagement": [
+        {
+            "groupId": "org.mule.connectors",
+            "artifactId": "mule-http-connector",
+            "version": "${muleHttpConnectorVersion}",
+            "classifier": "mule-plugin",
+            "scope": "compile"
+        },
+        {
+            "groupId": "com.mulesoft.mule.runtime",
+            "artifactId": "mule-core-ee",
+            "version": "${muleCoreEeVersion}",
+            "scope": "compile"
+        },
+        {
+            "groupId": "com.mulesoft.agent",
+            "artifactId": "mule-agent-configuration",
+            "version": "${muleAgentConfigurationVersion}",
+            "scope": "compile"
+        },
+        {
+            "groupId": "org.yaml",
+            "artifactId": "snakeyaml",
+            "version": "${snakeyamlVersion}",
+            "scope": "compile"
+        },
+        {
+            "groupId": "com.mulesoft.mule.runtime.modules",
+            "artifactId": "mule-module-plugin-ee",
+            "version": "${muleModulePluginEeVersion}",
+            "scope": "compile"
+        },
+        {
+            "groupId": "junit",
+            "artifactId": "junit",
+            "version": "${junitVersion}",
+            "scope": "test"
+        },
+        {
+            "groupId": "org.mockito",
+            "artifactId": "mockito-all",
+            "version": "${mockitoAllVersion}",
+            "scope": "test"
+        },
+        {
+            "groupId": "org.apache.logging.log4j",
+            "artifactId": "log4j-api",
+            "version": "${log4jApiVersion}",
+            "scope": "compile"
+        }
+    ],
+    "repositories": [
+        {
+            "id": "mulesoft-plugin-releases",
+            "url": "https://repository.mulesoft.org/releases/"
+        },
+        {
+            "id": "mulesoft-plugin-snapshots",
+            "url": "https://repository.mulesoft.org/snapshots/"
+        },
+        {
+            "id": "central",
+            "url": "https://repo.maven.apache.org/maven2"
+        },
+        {
+            "id": "repository.jboss.org-public",
+            "url": "https://repository.jboss.org/nexus/content/groups/public"
+        }
+    ],
+    "pluginRepositories": [
+        {
+            "id": "mulesoft-plugin-releases",
+            "url": "https://repository.mulesoft.org/releases/"
+        },
+        {
+            "id": "mulesoft-plugin-snapshots",
+            "url": "https://repository.mulesoft.org/snapshots/"
+        }
+    ],
+    "distributionManagement": {
+        "repository": {
+            "id": "anypoint-exchange-v3",
+            "name": "Anypoint Exchange V3",
+            "url": "https://maven.anypoint.mulesoft.com/api/v2/organizations/${project.groupId}/maven"
+        }
     },
-    {
-      "groupId": "org.yaml",
-      "artifactId": "snakeyaml",
-      "version": "${snakeyamlVersion}",
-      "scope": "compile"
-    },
-    {
-      "groupId": "com.mulesoft.mule.runtime.modules",
-      "artifactId": "mule-module-plugin-ee",
-      "version": "${muleModulePluginEeVersion}",
-      "scope": "compile"
-    },
-    {
-      "groupId": "junit",
-      "artifactId": "junit",
-      "version": "${junitVersion}",
-      "scope": "test"
-    },
-    {
-      "groupId": "org.mockito",
-      "artifactId": "mockito-all",
-      "version": "${mockitoAllVersion}",
-      "scope": "test"
-    },
-    {
-      "groupId": "org.apache.logging.log4j",
-      "artifactId": "log4j-api",
-      "version": "${log4jApiVersion}",
-      "scope": "compile"
-    }
-  ],
-  "repositories": [
-    {
-      "id": "mulesoft-plugin-releases",
-      "url": "https://repository.mulesoft.org/releases/"
-    },
-    {
-      "id": "mulesoft-plugin-snapshots",
-      "url": "https://repository.mulesoft.org/snapshots/"
-    },
-    {
-      "id": "central",
-      "url": "https://repo.maven.apache.org/maven2"
-    }
-  ],
-  "pluginRepositories": [
-    {
-      "id": "mulesoft-plugin-releases",
-      "url": "https://repository.mulesoft.org/releases/"
-    },
-    {
-      "id": "mulesoft-plugin-snapshots",
-      "url": "https://repository.mulesoft.org/snapshots/"
-    }
-  ],
-  "distributionManagement": {
-    "repository": {
-      "id": "anypoint-exchange-v3",
-      "name": "Anypoint Exchange V3",
-      "url": "https://maven.anypoint.mulesoft.com/api/v2/organizations/${project.groupId}/maven"
-    }
-  },
-  "description": "",
-  "url": "",
-  "inceptionYear": "",
-  "licenses": [],
-  "scm": {},
-  "issueManagement": {},
-  "ciManagement": {},
-  "mailingLists": [],
-  "developers": [],
-  "contributors": [],
-  "modules": [],
-  "dependencies": [],
-  "build": {},
-  "reporting": {},
-  "profiles": []
+    "description": "",
+    "url": "",
+    "inceptionYear": "",
+    "licenses": [],
+    "scm": {},
+    "issueManagement": {},
+    "ciManagement": {},
+    "mailingLists": [],
+    "developers": [],
+    "contributors": [],
+    "modules": [],
+    "dependencies": [],
+    "build": {},
+    "reporting": {},
+    "profiles": []
 }

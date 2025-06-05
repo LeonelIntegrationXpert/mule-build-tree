@@ -44,7 +44,7 @@ def get_current_branch():
     return run_command(["git", "rev-parse", "--abbrev-ref", "HEAD"])
 
 def auto_commit():
-    # 🔄 Mudar para a raiz do repositório
+    # 🔄 Muda para a raiz do repositório
     repo_root = run_command(["git", "rev-parse", "--show-toplevel"])
     os.chdir(repo_root)
 
@@ -52,7 +52,7 @@ def auto_commit():
     changes = get_git_changes()
 
     if not changes:
-        print("✅ Nenhuma alteração para commitar.\n")
+        print("✅ Nenhuma alteração detectada para commit.\n")
         return
 
     username, email = ensure_git_user_info()
@@ -61,21 +61,35 @@ def auto_commit():
 
     subprocess.run(["git", "add", "."], check=True)
 
-    commit_message = (
-        f"🤖 Auto-commit realizado em {timestamp}\n"
-        f"👤 Autor: {username} <{email}>\n"
-        f"🌿 Branch: {branch}\n"
-        f"📦 Arquivos alterados ({len(changes)}):\n"
-        + "\n".join(changes)
-    )
+    # Construção do commit message profissional e detalhado
+    commit_header = f"🤖 [Auto-Commit] Atualização automática em {timestamp}"
+    commit_author = f"👤 Autor: {username} <{email}>"
+    commit_branch = f"🌿 Branch: {branch}"
+    commit_summary = f"📦 Arquivos alterados ({len(changes)}):"
 
+    # Listagem detalhada, indentada para legibilidade
+    commit_files = "\n".join(f"    • {change}" for change in changes)
+
+    commit_message = f"""{commit_header}
+
+{commit_author}
+{commit_branch}
+
+{commit_summary}
+{commit_files}
+
+🛠️ Todas as alterações foram automaticamente adicionadas, commitadas e enviadas para o repositório remoto.
+🔒 Mensagem gerada automaticamente para rastreabilidade e auditoria.
+"""
+
+    # Executa o commit
     subprocess.run(["git", "commit", "-m", commit_message], check=True)
 
     print("\n🚀 Enviando commit para o repositório remoto...\n")
     subprocess.run(["git", "push", "origin", branch], check=True)
 
     print("✅ Commit e push concluídos com sucesso!")
-    print("🔒 Detalhes salvos no histórico do Git.\n")
+    print("🔒 Histórico atualizado e salvo.\n")
 
 if __name__ == "__main__":
     auto_commit()
