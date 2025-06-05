@@ -36,8 +36,8 @@ import re
 BASE_URL            = "https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/"
 # Diretório absoluto onde todos os POMs aprovados serão salvos, sem estrutura de pastas
 DOWNLOAD_DIR        = r"C:\Users\leonel.d.porto\Desktop\my-workspace\mule-build-tree\cli\decode_projects\jars"
-USERNAME            = "telefonica.brasil.sa.nexus"
-PASSWORD            = "5514U6DT4ykV8qF"
+USERNAME            = "YYYYY"
+PASSWORD            = "XXXXX"
 # Queremos baixar somente arquivos .pom que passem nos filtros. Então:
 EXTS_VALIDAS        = (".pom",)
 
